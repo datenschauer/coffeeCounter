@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    min-width: 230px;
+    max-width: 550px;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 1.4em;
+    margin: auto;
+}
+.main {
+    background-color: #5fc3ff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+}
+.title {
+    text-align: center;
+    color: whitesmoke;
+    text-shadow: 0 0 3px #0c0f19;
+    font-weight: 500;
+    font-kerning: auto;
+}
+.button {
+    margin: 20px 0;
+    background-color: #ff540e;
+    color: whitesmoke;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3px;
+}
+.main, .button {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+                0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
