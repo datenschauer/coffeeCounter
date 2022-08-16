@@ -1,20 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/base.css">
-    <title>Cafè Sedanstrasse</title>
-</head>
-<body>
-    <section class="main">
-        <h1 class="title">Café Sedanstraße</h1>
-        <br>
-        <a class="button" href="/login">Einloggen</a>
-        <p> </p>
-        <br>
+<%- include('includes/head.ejs') %>
+<%- include('includes/title.ejs') %>
+<%- include('includes/logo-only.ejs') %>
+
+        <form action="/login" method="post">
+            <button class="button" type="submit">Einloggen</button>
+        </form>
+        <p class="reg" id="no-account">Noch kein Account?</p>
+        <p class="reg" id="register"><a href="register">Hier registieren!</a></p>
     </section>
-</body>
-</html>
+
+<%- include('includes/end.ejs') %>

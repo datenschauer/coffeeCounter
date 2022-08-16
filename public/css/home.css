@@ -1,0 +1,19 @@
+.menu {
+    position: absolute;
+    font-size: 1.8em;
+    right: 55px;
+    top: 25px;
+}
+#coffe-amount {
+    font-size: 1.4em;
+    color: whitesmoke;
+    text-shadow: 0 0 3px #0c0f19;
+    font-weight: 500;
+}
+#coffee-slider {
+
+}
+.button.disabled {
+    background-color: #959899;
+    cursor: auto;
+}

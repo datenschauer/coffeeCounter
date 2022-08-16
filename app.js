@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 const express = require('express');
 const logger = require('morgan');
@@ -9,18 +10,23 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
-app.set('views', './views');
+const indexRoutes = require('./routes/user');
+const authRoutes = require('./routes/auth');
+
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static('./public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// const router = express.Router();
-app.get('/', (req, res, next) => {
-    res.render('index', {user: 'Stefan'});
+app.use('/', indexRoutes);
+app.use('/', authRoutes);
+
+app.use((req, res, next) => {
+    res.status(404).render('coffee-not-found');
 })
 
 const port = 3030;

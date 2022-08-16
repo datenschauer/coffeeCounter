@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 body {
     min-width: 230px;
@@ -9,21 +10,45 @@ body {
     font-size: 1.4em;
     margin: auto;
 }
+hr {
+    max-width: 450px;
+    min-width: 200px;
+    text-decoration: none;
+}
+a {
+    text-decoration: none;
+    color: #2a52ff;
+}
+p, label {
+    color: #111123;
+}
+img {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 530px;
+    min-width: 300px;
+    border-radius: 3%;
+}
 .main {
     background-color: #5fc3ff;
     border: none;
     border-radius: 5px;
     padding: 5px 10px 5px 10px;
     text-align: center;
+    position: relative;
 }
-.title {
+.title, .logo, .menu {
     text-align: center;
     color: whitesmoke;
     text-shadow: 0 0 3px #0c0f19;
     font-weight: 500;
     font-kerning: auto;
+    margin-bottom: 5px;
 }
 .button {
+    font-family: inherit;
+    font-size: 1em;
     margin: 20px 0;
     background-color: #ff540e;
     color: whitesmoke;
@@ -31,8 +56,50 @@ body {
     text-align: center;
     text-decoration: none;
     border-radius: 3px;
+    border: 1px solid antiquewhite;
+    /*
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1),
+                0 0 0 0 rgba(0, 0, 0, 0.1);
+    */
 }
-.main, .button {
+.button:hover {
+    cursor: pointer;
+}
+.main {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
                 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+}
+.material-symbols-outlined {
+    font-size: 1.2em;
+    vertical-align: baseline;
+    font-variation-settings:
+            'FILL' 0,
+            'wght' 500,
+            'GRAD' 0,
+            'opsz' 48;
+ }
+.logo {
+    position: absolute;
+    font-size: 1.8em;
+    left: 55px;
+    top: 25px;
+}
+.logo > a {
+    text-decoration: none;
+    color: inherit;
+}
+.reg {
+    font-size: 0.8em;
+    color: whitesmoke;
+    padding: 0;
+    margin: 3px;
+}
+#no-account {
+    margin-top: 15px;
+}
+#register {
+    margin-bottom: 15px;
+}
+@media screen  {
+
 }
