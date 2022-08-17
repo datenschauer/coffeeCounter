@@ -69,7 +69,7 @@ app.use("/", authRoutes);
 app.use(errorController.get404);
 
 // START server with initial connection to mongodb
-const port = 3030;
+const port = 80;
 
 mongoose
   .connect(MONGODB_URI)
