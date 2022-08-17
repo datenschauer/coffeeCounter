@@ -1,13 +1,31 @@
 {
+  "name": "coffee-counter",
+  "version": "0.0.1",
+  "description": "An app to count coffee drank in our office.",
+  "main": "app.js",
+  "keywords": [
+    "coffee",
+    "counter"
+  ],
+  "author": "Stefan Boehringer",
+  "license": "MIT",
+  "engines": {
+    "node": "^18.7.0"
+  },
   "dependencies": {
-    "connect-mongo": "^4.6.0",
-    "connect-mongodb": "^0.4.0",
+    "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
+    "mongoose": "^6.5.2",
+    "mongoose-int32": "^0.6.0",
     "morgan": "^1.10.0",
     "passport": "^0.6.0"
+  },
+  "devDependencies": {
+    "install": "^0.13.0",
+    "prettier": "2.7.1"
   }
 }

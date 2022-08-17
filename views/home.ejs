@@ -7,7 +7,8 @@
 
     <%- include('includes/nav.ejs') %>
 
-    <p>Wie viel Kaffee hast du getrunken?</p>
+    <p>Hallo <%= session.user.firstname %>!</p>
+    <p>Wie viel Kaffee hast du heute getrunken?</p>
     <form action="/add-coffee" method="post">
         <label for="coffee" id="coffe-amount">0</label>
         <br>
@@ -16,33 +17,8 @@
         <input type="checkbox" id="milk" name="milk">
         <label for="milk">mit Milch</label>
         <br>
-        <button type="submit" class="button disabled" disabled>abschicken</button>
+        <button id="coffee-btn" type="submit" class="button disabled" disabled>abschicken</button>
     </form>
 </section>
-<script>
-    const updateCoffeeValue = (value) => {
-        const coffeeAmount = document.querySelector('#coffe-amount');
-        coffeeAmount.textContent = value;
-    }
-
-    const enableButton = () => {
-        const button = document.querySelector('button');
-        button.classList.remove('disabled');
-        button.disabled = false;
-    }
-
-    const disableButton = () => {
-        const button = document.querySelector('button');
-        button.classList.add('disabled');
-        button.disabled = true;
-    }
-
-    const coffeeSlider = document.querySelector('#coffee-slider');
-
-    coffeeSlider.addEventListener('input', (ev) => {
-        const value = ev.target.value;
-        updateCoffeeValue(value);
-        value > 0 ? enableButton() : disableButton();
-    })
-</script>
+<script src="/js/coffeecounter.js"></script>
 <%- include('includes/end.ejs') %>

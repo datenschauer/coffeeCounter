@@ -1,5 +1,19 @@
 <section class="main">
-    <div class="menu"><span class="material-symbols-outlined">menu</span></div>
-    <div class="logo"><a href="/home"><span class="material-symbols-outlined">coffee</span></a></div>
-    <h1 class="title">Café Sedanstraße</h1>
+    <div class="header">
+        <div class="logo"><a href="/home"><span class="material-symbols-outlined">coffee</span></a></div>
+        <div class="title"><h1 class="title">Café Sedanstraße</h1></div>
+        <div class="menu-btn"><span class="material-symbols-outlined">menu</span></div>
+        <div class="menu hidden">
+            <ul>
+                <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+                <li><a href="#">Link 3</a></li>
+                <li class="<%= session.isLoggedIn ? "" : "hidden" %>">
+                    <form action="/logout" method="post">
+                        <button class="button" type="submit">Log Out</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
     <hr>

@@ -1,12 +1,12 @@
 <%- include('includes/head.ejs') %>
 <%- include('includes/title.ejs') %>
-<%- include('includes/logo-only.ejs') %>
+<%- include('includes/nav.ejs') %>
 
-        <form action="/login" method="post">
+        <form action="/login" method="get">
             <button class="button" type="submit">Einloggen</button>
         </form>
         <p class="reg" id="no-account">Noch kein Account?</p>
-        <p class="reg" id="register"><a href="register">Hier registieren!</a></p>
+        <p class="reg" id="register"><a href="/register">Hier registieren!</a></p>
     </section>
 
 <%- include('includes/end.ejs') %>

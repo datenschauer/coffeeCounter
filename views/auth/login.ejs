@@ -1,0 +1,16 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/title.ejs') %>
+<%- include('../includes/nav.ejs') %>
+<form action="/login" method="post">
+    <div class="segment">
+        <label for="email">E-Mail:</label><br>
+        <input type="email" id="email" name="email" required autofocus autocomplete="email">
+    </div>
+    <div class="segment">
+        <label for="password">Passwort:</label><br>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+    </div>
+    <button class="button" type="submit">abschicken</button>
+</form>
+    </section>
+<%- include('../includes/end.ejs') %>

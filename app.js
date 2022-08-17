@@ -1,36 +1,96 @@
-require('dotenv').config();
-const path = require('path');
+// IMPORT node specific stuff
+require("dotenv").config();
+const path = require("path");
 
-const express = require('express');
-const logger = require('morgan');
-const passport = require('passport');
-const session = require('express-session');
-// const MongoStore = require('connect-mongo')(session);
-const cookieParser = require('cookie-parser');
+// IMPORT node modules
+const express = require("express");
+const mongoose = require("mongoose");
+const logger = require("morgan");
+const passport = require("passport");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const cookieParser = require("cookie-parser");
 
+// INSTANTIATE express app
 const app = express();
 
-const indexRoutes = require('./routes/user');
-const authRoutes = require('./routes/auth');
+// IMPORT internal stuff
+const errorController = require(path.join(__dirname, "controllers", "error"));
+const constants = require("./util/constants");
+const timeIntervals = constants.timeIntervals;
+const User = require("./models/user");
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// SETUP session storage and management
+const MONGODB_URI =
+  "mongodb+srv://dasboeh:SPFv2gqVFyRqRD@cluster0.go1ge7g.mongodb.net/coffeeCounter?retryWrites=true&w=majority";
 
-app.use(logger('dev'));
+const sessionStore = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: "sessions",
+});
+sessionStore.on("error", (err) => {
+  console.log(err);
+});
+
+// SETUP routes
+const indexRoutes = require("./routes/user");
+const authRoutes = require("./routes/auth");
+
+// SETUP views
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+// SETUP middleware
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use('/', indexRoutes);
-app.use('/', authRoutes);
+app.use(
+  session({
+    secret: "drink_Some_coffee_in_04",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: timeIntervals.WEEK * 2 },
+    store: sessionStore,
+  })
+);
 
+// TEMP always show session in log
 app.use((req, res, next) => {
-    res.status(404).render('coffee-not-found');
-})
+  console.log(req.session);
+  next();
+});
 
+app.use("/", indexRoutes);
+app.use("/", authRoutes);
+
+app.use(errorController.get404);
+
+// START server with initial connection to mongodb
 const port = 3030;
 
-app.listen(port, () => {
-    console.log('Running!');
-})
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    // TEMP: setup initial user
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          firstname: "Stefan",
+          lastname: "Böhringer",
+          email: "stefan.boehringer@posteo.de",
+          hashedPassword: "jfasdldfjla",
+          passwordSalt: "fjösajdföl",
+          isAdmin: true,
+        });
+        user.save();
+      }
+    });
+    app.listen(port);
+    console.log("Running!");
+  })
+  .catch((err) => {
+    console.log(err);
+  });

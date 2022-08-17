@@ -1,0 +1,27 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/title.ejs') %>
+<%- include('../includes/nav.ejs') %>
+
+<form action="/register" method="post">
+    <div class="segment">
+        <label for="firstname">Vorname:</label><br>
+        <input type="text" id="firstname" name="firstname" required autocomplete="given-name" autofocus>
+    </div>
+    <div class="segment">
+        <label for="lastname">Nachname:</label><br>
+        <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
+    </div>
+    <div class="segment">
+        <label for="email">E-Mail:</label><br>
+        <input type="email" id="email" name="email" required autocomplete="email">
+<!--        <div class="<% // error ? '' : 'hidden'%>"><%= // error %></div>-->
+    </div>
+    <div class="segment">
+        <label for="password">Passwort:</label><br>
+        <input type="password" id="password" name="password" required autocomplete="new-password">
+    </div>
+    <button class="button" type="submit">abschicken</button>
+</form>
+
+</section>
+<%- include('../includes/end.ejs') %>
