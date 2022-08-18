@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const userController = require("../controllers/userController");
 
 router.get("/home", (req, res, next) => {
   if (req.session.isLoggedIn) {
@@ -9,14 +10,9 @@ router.get("/home", (req, res, next) => {
   }
 });
 
-router.post("/add-coffee", (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/thanks", { session: req.session });
-});
+router.post("/add-coffee", userController.postAddCoffee);
 
-router.get("/thanks", (req, res, next) => {
-  res.send("THANKS");
-});
+router.get("/status", userController.getUserStatus);
 
 router.get("/", (req, res, next) => {
   if (req.session.isLoggedIn) {

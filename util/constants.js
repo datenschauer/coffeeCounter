@@ -8,3 +8,7 @@ timeIntervals.DAY = timeIntervals.HOUR * 24;
 timeIntervals.WEEK = timeIntervals.DAY * 7;
 
 exports.timeIntervals = timeIntervals;
+
+exports.PRICE_PER_CUP = 25;
+
+exports.PRICE_FOR_MILK = 15;

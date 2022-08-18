@@ -18,7 +18,6 @@ const app = express();
 const errorController = require(path.join(__dirname, "controllers", "error"));
 const constants = require("./util/constants");
 const timeIntervals = constants.timeIntervals;
-const User = require("./models/user");
 
 // SETUP session storage and management
 const MONGODB_URI =
@@ -57,11 +56,13 @@ app.use(
   })
 );
 
+/*
 // TEMP always show session in log
 app.use((req, res, next) => {
   console.log(req.session);
   next();
 });
+*/
 
 app.use("/", indexRoutes);
 app.use("/", authRoutes);
@@ -69,25 +70,11 @@ app.use("/", authRoutes);
 app.use(errorController.get404);
 
 // START server with initial connection to mongodb
-const port = 80;
+const port = 3030;
 
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    // TEMP: setup initial user
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          firstname: "Stefan",
-          lastname: "Böhringer",
-          email: "stefan.boehringer@posteo.de",
-          hashedPassword: "jfasdldfjla",
-          passwordSalt: "fjösajdföl",
-          isAdmin: true,
-        });
-        user.save();
-      }
-    });
     app.listen(port);
     console.log("Running!");
   })

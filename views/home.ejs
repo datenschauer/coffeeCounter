@@ -7,8 +7,10 @@
 
     <%- include('includes/nav.ejs') %>
 
+<div class="bubble">
     <p>Hallo <%= session.user.firstname %>!</p>
     <p>Wie viel Kaffee hast du heute getrunken?</p>
+</div>
     <form action="/add-coffee" method="post">
         <label for="coffee" id="coffe-amount">0</label>
         <br>

@@ -1,0 +1,13 @@
+<%- include('includes/head.ejs') %>
+<%- include('includes/title.ejs') %>
+
+<%- include('includes/nav.ejs') %>
+
+<div class="bubble">
+    <p><span class="material-symbols-outlined">coffee</span> | Dieser Monat: <span class="count"><%= drinksThisMonth %></span> <em>Tassen</em> Kaffee.</p>
+    <hr class="black">
+    <p><span class="material-symbols-outlined">account_balance_wallet</span> | Aktueller Saldo: <span class="count"><%= balance %></span> <em>Euro</em>.</p>
+</div>
+
+</section>
+<%- include('includes/end.ejs') %>

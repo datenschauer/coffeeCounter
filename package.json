@@ -10,12 +10,13 @@
   "author": "Stefan Boehringer",
   "license": "MIT",
   "engines": {
-    "node": "^18.7.0"
+    "node": "^16.7.0"
   },
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",

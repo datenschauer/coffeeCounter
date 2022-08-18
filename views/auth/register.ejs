@@ -3,6 +3,7 @@
 <%- include('../includes/nav.ejs') %>
 
 <form action="/register" method="post">
+    <div class="bubble">
     <div class="segment">
         <label for="firstname">Vorname:</label><br>
         <input type="text" id="firstname" name="firstname" required autocomplete="given-name" autofocus>
@@ -19,6 +20,7 @@
     <div class="segment">
         <label for="password">Passwort:</label><br>
         <input type="password" id="password" name="password" required autocomplete="new-password">
+    </div>
     </div>
     <button class="button" type="submit">abschicken</button>
 </form>
