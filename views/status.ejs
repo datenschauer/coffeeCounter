@@ -1,12 +1,32 @@
 <%- include('includes/head.ejs') %>
+<link rel="stylesheet" href="/css/badges.css">
+
 <%- include('includes/title.ejs') %>
 
 <%- include('includes/nav.ejs') %>
 
+    <div class="flex-wrapper">
+        <div class="vertical-container">
+            <div class="upper">
+                <%= cups %>
+            </div>
+            <div class="lower">
+                <span class="material-symbols-outlined">coffee</span>
+            </div>
+        </div>
+        <div class="vertical-container">
+            <div class="upper">
+                <%= balance %>
+            </div>
+            <div class="lower">
+                <span class="material-symbols-outlined">euro_symbol</span>
+            </div>
+        </div>
+    </div>
+
 <div class="bubble">
-    <p><span class="material-symbols-outlined">coffee</span> | Dieser Monat: <span class="count"><%= drinksThisMonth %></span> <em>Tassen</em> Kaffee.</p>
-    <hr class="black">
-    <p><span class="material-symbols-outlined">account_balance_wallet</span> | Aktueller Saldo: <span class="count"><%= balance %></span> <em>Euro</em>.</p>
+    <p>Seit deiner letzten Abrechnung hast du <span class="count"><%= cups %></span> <em>Tassen</em> Kaffee
+        getrunken. Dein aktueller Saldo liegt bei <span class="count"><%= balance %></span> <em>Euro</em>.</p>
 </div>
 
 </section>

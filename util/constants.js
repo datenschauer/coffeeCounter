@@ -12,3 +12,5 @@ exports.timeIntervals = timeIntervals;
 exports.PRICE_PER_CUP = 25;
 
 exports.PRICE_FOR_MILK = 15;
+
+exports.TOKEN_EXPIRATION_IN_MINUTES = 30;

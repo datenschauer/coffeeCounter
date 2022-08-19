@@ -3,19 +3,22 @@
 <%- include('../includes/nav.ejs') %>
 
 <form action="/register" method="post">
+    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
     <div class="segment">
         <label for="firstname">Vorname:</label><br>
-        <input type="text" id="firstname" name="firstname" required autocomplete="given-name" autofocus>
+        <input type="text" id="firstname" name="firstname" placeholder="<%= firstname ? firstname : "" %>" required autocomplete="given-name" autofocus>
     </div>
     <div class="segment">
         <label for="lastname">Nachname:</label><br>
-        <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
+        <input type="text" id="lastname" name="lastname" placeholder="<%= lastname ? lastname : "" %>" required autocomplete="family-name">
     </div>
     <div class="segment">
         <label for="email">E-Mail:</label><br>
-        <input type="email" id="email" name="email" required autocomplete="email">
-<!--        <div class="<% // error ? '' : 'hidden'%>"><%= // error %></div>-->
+        <input type="email" id="email" name="email" placeholder="<%= email ? email : "" %>" required autocomplete="email">
+        <% if (emailTaken) { %>
+        <div class="error">Diese E-Mail ist schon registriert.</div>
+        <% } %>
     </div>
     <div class="segment">
         <label for="password">Passwort:</label><br>

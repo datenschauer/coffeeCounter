@@ -15,6 +15,7 @@ hr {
     min-width: 200px;
     text-decoration: none;
     border: 1px solid whitesmoke;
+    margin-bottom: 25px;
 }
 hr.black {
     border: 1px solid #0c0f19;
@@ -35,6 +36,14 @@ img {
     max-width: 530px;
     min-width: 300px;
     border-radius: 3%;
+}
+.msg {
+    font-size: 0.8em;
+    margin: 10px 0;
+    color: #35b618;
+}
+.msg.msg--error {
+    color: #ff540e;
 }
 .hidden {
     display: none;

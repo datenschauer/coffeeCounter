@@ -9,9 +9,11 @@
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="#"><span class="material-symbols-outlined">account_circle</span> | Account</a></li>
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>">
                     <form action="/logout" method="post">
+                        <input class="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="button" type="submit">Log Out</button>
                     </form>
                 </li>
             </ul>
         </div>
     </div>
+    <hr>

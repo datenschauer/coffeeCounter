@@ -25,7 +25,12 @@ const userSchema = new Schema({
     required: true,
   },
   lastLogin: Date,
+  resetToken: String,
+  tokenExpirationDate: Date,
+  lastPayment: Date,
+  paymentPending: Boolean,
   currentBalanceInCent: Number,
+  cupsSinceLastPayment: Number,
   drinks: [
     {
       date: {

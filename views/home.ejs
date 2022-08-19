@@ -12,6 +12,7 @@
     <p>Wie viel Kaffee hast du heute getrunken?</p>
 </div>
     <form action="/add-coffee" method="post">
+        <input class="hidden" name="_csrf" value="<%= csrfToken %>">
         <label for="coffee" id="coffe-amount">0</label>
         <br>
         <input type="range" id="coffee-slider" name="coffee" min="0" max="10" value="0">

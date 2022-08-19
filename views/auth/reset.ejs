@@ -1,0 +1,29 @@
+<%- include('../includes/head.ejs') %>
+<%- include('../includes/title.ejs') %>
+<%- include('../includes/nav.ejs') %>
+<div class="bubble">
+    <p>Hier kannst du dein Passwort zurücksetzen:</p>
+    <form action="/resetpassword" method="post">
+        <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="segment">
+            <label for="email">Gib die E-Mail Adresse des Accounts ein, für den Du das Passwort zurücksetzen willst.</label>
+            <input type="email" name="email" id="email" required autofocus autocomplete="email">
+        </div>
+        <% if (matchError) {%>
+            <div class="msg msg--error">
+                Dieses E-Mail Adresse konnte nicht gefunden werden.
+            </div>
+        <%} else if (expiredError) {%>
+            <div class="msg msg--error">
+                Dieser Link ist leider schon abgelaufen. Setzen Sie das Passwort noch einmal zurück!
+            </div>
+        <%} else if (error) {%>
+            <div class="msg msg--error">
+                Ups! Hier ist etwas schief gelaufen, bitte versuche es in ein paar Minuten noch einmal.
+            </div>
+        <% } %>
+        <button class="button" type="submit">Passwort zurücksetzen</button>
+    </form>
+</div>
+</section>
+<%- include('../includes/end.ejs') %>

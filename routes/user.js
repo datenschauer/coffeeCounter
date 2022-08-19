@@ -1,24 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const { isLoggedIn } = require("../middleware/auth");
 
-router.get("/home", (req, res, next) => {
-  if (req.session.isLoggedIn) {
-    res.render("home", { session: req.session });
-  } else {
-    res.redirect("/");
-  }
+router.get("/home", isLoggedIn, (req, res, next) => {
+  res.render("home");
 });
 
-router.post("/add-coffee", userController.postAddCoffee);
+router.post("/add-coffee", isLoggedIn, userController.postAddCoffee);
 
-router.get("/status", userController.getUserStatus);
+router.get("/status", isLoggedIn, userController.getUserStatus);
 
 router.get("/", (req, res, next) => {
   if (req.session.isLoggedIn) {
     res.redirect("/home");
   } else {
-    res.render("index", { session: req.session });
+    res.render("index");
   }
 });
 

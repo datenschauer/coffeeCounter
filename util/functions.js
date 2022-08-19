@@ -7,3 +7,7 @@ exports.filterByCurrentMonth = function (arrayObj) {
     );
   });
 };
+
+exports.getRandomInt = function (min = 0, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+};

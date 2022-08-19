@@ -2,7 +2,15 @@
 <%- include('../includes/title.ejs') %>
 <%- include('../includes/nav.ejs') %>
 <form action="/login" method="post">
+    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
+        <% if (justRegistered) {%>
+            <div class="msg">Vielen Dank für Ihre Registrierung!<br>Sie können sich jetzt einloggen.</div>
+        <% } else if (resetMessage) { %>
+            <div class="msg">Eine E-Mail zum Zurücksetzen Ihres Passworts wurde an Ihre Adresse gesendet.</div>
+        <% } else if (passwordSavedMessage) {%>
+            <div class="msg">Das neue Passwort wurde gespeichert. Sie können sich jetzt einloggen.</div>
+        <%}%>
     <div class="segment">
         <label for="email">E-Mail:</label><br>
         <input type="email" id="email" name="email" required autofocus autocomplete="email">
@@ -11,6 +19,15 @@
         <label for="password">Passwort:</label><br>
         <input type="password" id="password" name="password" required autocomplete="current-password">
     </div>
+        <!-- Error Messages go here: -->
+        <% if (matchError) {%>
+            <div class="msg msg--error">E-Mail oder Passwort falsch!</div>
+            <div class="segment">
+                Haben Sie Ihr Passwort vergessen? Dann können sie es <a href="/resetpassword">hier zurücksetzen</a>.
+            </div>
+        <%} else if (loginError) {%>
+            <div class="msg msg--error">Ups! Etwas schief gelaufen. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.</div>
+        <% } %>
     </div>
     <button class="button" type="submit">abschicken</button>
 </form>

@@ -6,10 +6,10 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const logger = require("morgan");
-const passport = require("passport");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
-const cookieParser = require("cookie-parser");
+const csrf = require("csurf");
+const flash = require("connect-flash"); // for flashing messages to seesions by redirect (e.g. errors to the user)
 
 // INSTANTIATE express app
 const app = express();
@@ -18,6 +18,7 @@ const app = express();
 const errorController = require(path.join(__dirname, "controllers", "error"));
 const constants = require("./util/constants");
 const timeIntervals = constants.timeIntervals;
+const { setLocalVariables } = require("./middleware/auth");
 
 // SETUP session storage and management
 const MONGODB_URI =
@@ -31,6 +32,9 @@ sessionStore.on("error", (err) => {
   console.log(err);
 });
 
+// SETUP CSRF Protection
+const csrfProtection = csrf();
+
 // SETUP routes
 const indexRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
@@ -43,7 +47,6 @@ app.set("view engine", "ejs");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
@@ -55,14 +58,19 @@ app.use(
     store: sessionStore,
   })
 );
+app.use(csrfProtection);
+app.use(flash());
 
-/*
 // TEMP always show session in log
+/*
 app.use((req, res, next) => {
   console.log(req.session);
   next();
 });
-*/
+ */
+
+// SET special variables to localStorage which should be used in EVERY page
+app.use(setLocalVariables);
 
 app.use("/", indexRoutes);
 app.use("/", authRoutes);
@@ -70,11 +78,11 @@ app.use("/", authRoutes);
 app.use(errorController.get404);
 
 // START server with initial connection to mongodb
-const port = 3030;
+const port = 8000;
 
 mongoose
   .connect(MONGODB_URI)
-  .then(() => {
+  .then((_) => {
     app.listen(port);
     console.log("Running!");
   })
