@@ -197,7 +197,7 @@ exports.getNewPassword = (req, res, next) => {
     .then((user) => {
       if (!user) {
         req.flash("expiredError", true);
-        res.redirect("/resetpassword");
+        return res.redirect("/resetpassword");
       } else {
         res.render("auth/new-password", {
           path: "/new-password",
