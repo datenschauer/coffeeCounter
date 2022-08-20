@@ -2,7 +2,7 @@
 <%- include('../includes/title.ejs') %>
 <%- include('../includes/nav.ejs') %>
 
-<form action="/register" method="post">
+<form action="/register" method="post" novalidate>
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
     <div class="segment">
@@ -17,11 +17,15 @@
         <label for="email">E-Mail:</label><br>
         <input type="email" id="email" name="email" placeholder="<%= email ? email : "" %>" required autocomplete="email">
         <% if (emailTaken) { %>
-        <div class="error">Diese E-Mail ist schon registriert.</div>
-        <% } %>
+        <div class="msg msg--error">Diese E-Mail ist schon registriert.</div>
+        <% } else if (emailValidationError) { %>
+        <div class="msg msg--error">Bitte gib eine gültige E-Mail Adresse ein.</div>
+        <%}%>
     </div>
     <div class="segment">
-        <label for="password">Passwort:</label><br>
+        <div class="info-overlay hidden" id="info-overlay">Das Passwort muss aus mindestens 8 Zeichen bestehen, muss,
+            Groß- und Kleinbuchstaben, sowie eine Zahl und ein Sonderzeichen (z.B. "/", "-" oder "_") enthalten.</div>
+        <label for="password">Passwort:  </label><div class="material-symbols-outlined info" id="pw-help">help</div><br>
         <input type="password" id="password" name="password" required autocomplete="new-password">
     </div>
     </div>
@@ -29,4 +33,6 @@
 </form>
 
 </section>
+<script>
+</script>
 <%- include('../includes/end.ejs') %>

@@ -1,4 +1,5 @@
 const express = require("express");
+const { check } = require("express-validator");
 const router = express.Router();
 const authController = require("../controllers/authController");
 const { isLoggedIn } = require("../middleware/auth");
@@ -9,7 +10,7 @@ router.post("/login", authController.postLogin);
 
 router.get("/register", authController.getRegister);
 
-router.post("/register", authController.postRegister);
+router.post("/register", check("email").isEmail(), authController.postRegister);
 
 router.post("/logout", isLoggedIn, authController.postLogout);
 

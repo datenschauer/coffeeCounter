@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const sendgridMailer = require("@sendgrid/mail");
+const { validationResult } = require("express-validator")
 const { registeredMessage, passwordResetMessage } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
@@ -87,6 +88,7 @@ exports.getRegister = (req, res, next) => {
       firstname: req.flash("firstname")[0],
       lastname: req.flash("lastname")[0],
       emailTaken: req.flash("emailTaken")[0],
+      emailValidationError: req.flash("emailValidationError")[0],
       email: req.flash("email")[0],
     });
   }
@@ -97,7 +99,18 @@ exports.postRegister = (req, res, next) => {
   const lastname = req.body.lastname;
   const email = req.body.email;
   const password = req.body.password;
+  const errors = validationResult(req);
   const salt = 12;
+  if (!errors.isEmpty()) {
+    req.flash("emailValidationError", true);
+    return res.status(422).render("auth/register", {
+      path: "/register",
+      firstname: req.flash("firstname")[0],
+      lastname: req.flash("lastname")[0],
+      emailTaken: req.flash("emailTaken")[0],
+      emailValidationError: req.flash("emailValidationError")[0],
+      email: req.flash("email")[0]
+  })}
   User.findOne({ email: email })
     .then((userDocExists) => {
       // check if a user with this email already exists

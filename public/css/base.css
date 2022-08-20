@@ -10,6 +10,11 @@ body {
     font-size: 1.3em;
     margin: auto;
 }
+input {
+    font-size: 0.8em;
+    font-family: inherit;
+    width: 220px;
+}
 hr {
     max-width: 460px;
     min-width: 200px;
@@ -24,7 +29,7 @@ hr.black {
 }
 a {
     text-decoration: none;
-    color: #287ae1;
+    color: #0e51a9;
 }
 p, label {
     color: #111123;
@@ -156,6 +161,13 @@ li.hidden {
 .material-symbols-outlined.link {
     color: whitesmoke;
 }
+.material-symbols-outlined.info {
+    font-size: 0.75em;
+    vertical-align: super;
+}
+.material-symbols-outlined.info:hover {
+    cursor: pointer;
+}
 .reg {
     font-size: 0.8em;
     color: whitesmoke;
@@ -183,6 +195,19 @@ span.count {
 }
 .segment {
     padding: 10px 0;
+}
+.info-overlay {
+    position: absolute;
+    z-index: 98;
+    width: 300px;
+    color: whitesmoke;
+    font-size: 0.7em;
+    background-color: rgba(22, 46, 98, 0.93);
+    padding: 8px;
+    border-radius: 5px;
+}
+.info-overlay.hidden {
+    display: none;
 }
 #no-account {
     margin-top: 15px;
