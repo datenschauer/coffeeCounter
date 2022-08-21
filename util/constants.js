@@ -14,3 +14,6 @@ exports.PRICE_PER_CUP = 25;
 exports.PRICE_FOR_MILK = 15;
 
 exports.TOKEN_EXPIRATION_IN_MINUTES = 30;
+
+exports.BASE_URL = 'http://ec2-3-75-14-55.eu-central-1.compute.amazonaws.com';
+// exports.BASE_URL = 'http://localhost:8000';

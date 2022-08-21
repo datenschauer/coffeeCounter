@@ -21,8 +21,7 @@ const timeIntervals = constants.timeIntervals;
 const { setLocalVariables } = require("./middleware/auth");
 
 // SETUP session storage and management
-const MONGODB_URI =
-  "mongodb+srv://dasboeh:SPFv2gqVFyRqRD@cluster0.go1ge7g.mongodb.net/coffeeCounter?retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 const sessionStore = new MongoDBStore({
   uri: MONGODB_URI,

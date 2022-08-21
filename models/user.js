@@ -24,7 +24,12 @@ const userSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  isActive: {
+    type: Boolean,
+    required: true,
+  },
   lastLogin: Date,
+  confirmToken: String,
   resetToken: String,
   tokenExpirationDate: Date,
   lastPayment: Date,

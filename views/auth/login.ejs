@@ -1,16 +1,21 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/title.ejs') %>
 <%- include('../includes/nav.ejs') %>
+<h1 class="title">Login</h1>
 <form action="/login" method="post">
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
         <% if (justRegistered) {%>
-            <div class="msg">Vielen Dank für Ihre Registrierung!<br>Sie können sich jetzt einloggen.</div>
+            <div class="msg">Vielen Dank für deine Registrierung!<br>Dir wurde ein Link an deine E-Mail Adresse zur Bestätigung geschickt.</div>
         <% } else if (resetMessage) { %>
-            <div class="msg">Eine E-Mail zum Zurücksetzen Ihres Passworts wurde an Ihre Adresse gesendet.</div>
+            <div class="msg">Eine E-Mail zum Zurücksetzen deines Passworts wurde an deine E-Mail Adresse gesendet.</div>
         <% } else if (passwordSavedMessage) {%>
-            <div class="msg">Das neue Passwort wurde gespeichert. Sie können sich jetzt einloggen.</div>
-        <%}%>
+            <div class="msg">Das neue Passwort wurde gespeichert. Du kannst dich jetzt einloggen.</div>
+        <% } else if (emailConfirmed) {%>
+            <div class="msg">Deine E-Mail wurde erfolgreich bestätigt. Du kannst dich jetzt einloggen.</div>
+        <% } else if (userDeactivated) {%>
+            <div class="msg msg--error">Dieser Nutzer ist inaktiv!</div>
+        <% } %>
     <div class="segment">
         <label for="email">E-Mail:</label><br>
         <input type="email" id="email" name="email" required autofocus autocomplete="email">
@@ -23,10 +28,10 @@
         <% if (matchError) {%>
             <div class="msg msg--error">E-Mail oder Passwort falsch!</div>
             <div class="segment">
-                Haben Sie Ihr Passwort vergessen? Dann können sie es <a href="/resetpassword">hier zurücksetzen</a>.
+                Hast du dein Passwort vergessen? Dann kannst du es <a href="/resetpassword">hier zurücksetzen</a>.
             </div>
         <%} else if (loginError) {%>
-            <div class="msg msg--error">Ups! Etwas schief gelaufen. Bitte versuchen Sie es zu einem späteren Zeitpunkt noch einmal.</div>
+            <div class="msg msg--error">Ups! Etwas ist schief gelaufen. Bitte versuche es zu einem späteren Zeitpunkt noch einmal.</div>
         <% } %>
     </div>
     <button class="button" type="submit">abschicken</button>

@@ -19,6 +19,8 @@ exports.getLogin = (req, res, next) => {
       justRegistered: req.flash("justRegistered")[0],
       resetMessage: req.flash("resetMessage")[0],
       passwordSavedMessage: req.flash("passwordSavedMessage")[0],
+      emailConfirmed: req.flash("emailConfirmed")[0],
+      userDeactivated: req.flash("userDeactivated")[0],
     });
   }
 };
@@ -32,10 +34,14 @@ exports.postLogin = (req, res, next) => {
       lastname: 1,
       isAdmin: 1,
       hashedPassword: 1,
+      isActive: 1,
     }
   ).then((user) => {
     if (!user) {
       req.flash("matchError", true);
+      return res.redirect("/login");
+    } else if (user.isActive === false) {
+      req.flash("userDeactivated", true);
       return res.redirect("/login");
     }
     // check if transmitted password is equal to stored password
@@ -90,6 +96,7 @@ exports.getRegister = (req, res, next) => {
       emailTaken: req.flash("emailTaken")[0],
       emailValidationError: req.flash("emailValidationError")[0],
       email: req.flash("email")[0],
+      tokenError: req.flash("tokenError")[0],
     });
   }
 };
@@ -101,6 +108,7 @@ exports.postRegister = (req, res, next) => {
   const password = req.body.password;
   const errors = validationResult(req);
   const salt = 12;
+  let confirmToken;
   if (!errors.isEmpty()) {
     req.flash("emailValidationError", true);
     return res.status(422).render("auth/register", {
@@ -124,33 +132,65 @@ exports.postRegister = (req, res, next) => {
       return bcrypt
         .hash(password, salt)
         .then((hashedPassword) => {
-          const user = new User({
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            hashedPassword: hashedPassword,
-            isAdmin: false,
-            currentBalanceInCent: 0,
-            cupsSinceLastPayment: 0,
-          });
+           crypto.randomBytes(32, (err, buffer) => {
+            if (err) {
+              console.log(err);
+              req.flash("error", true);
+              return res.redirect("/reset");
+            }
+            confirmToken = buffer.toString("hex");
+             console.log(`Der Token, nachdem er erstellt wurde! ${confirmToken}`)
+            const user = new User({
+              firstname: firstname,
+              lastname: lastname,
+              email: email,
+              hashedPassword: hashedPassword,
+              isAdmin: false,
+              isActive: false,
+              confirmToken: confirmToken,
+              currentBalanceInCent: 0,
+              cupsSinceLastPayment: 0,
+            });
+             req.flash("justRegistered", true);
+             res.redirect("/login");
+             console.log(`Der Token, bevor er verschickt wird! ${confirmToken}`)
+             const emailMessage = registeredMessage(email, firstname, lastname, confirmToken);
+             sendgridMailer.send(emailMessage).then(
+               (_) => {},
+               (error) => {
+                 console.log(error);
+                 if (error.response) {
+                   console.log(error.response.body);
+                 }
+               }
+             );
           return user.save();
         })
-        .then((_) => {
-          req.flash("justRegistered", true);
-          res.redirect("/login");
-          const emailMessage = registeredMessage(email, firstname, lastname);
-          sendgridMailer.send(emailMessage).then(
-            (_) => {},
-            (error) => {
-              console.log(error);
-              if (error.response) {
-                console.log(error.response.body);
-              }
-            }
-          );
-        });
+        })
     })
     .catch((err) => console.log(err));
+};
+
+exports.getConfirm = (req, res, next) => {
+  const token = req.params.token;
+  console.log(token);
+  User.findOne({ confirmToken: token }).then(
+    user => {
+      if (!user) {
+        req.flash("tokenError", true);
+        return res.redirect("/register");
+      } else {
+        user.isActive = true;
+        user.confirmToken = undefined;
+        return user.save();
+      }
+    }
+  )
+    .then(_ => {
+      req.flash("emailConfirmed", true);
+      res.redirect("/login");
+    })
+    .catch(err => console.log(err));
 };
 
 exports.getReset = (req, res, next) => {

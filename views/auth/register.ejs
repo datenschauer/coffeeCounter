@@ -1,10 +1,13 @@
 <%- include('../includes/head.ejs') %>
 <%- include('../includes/title.ejs') %>
 <%- include('../includes/nav.ejs') %>
-
+<h1 class="title">Registrierung</h1>
 <form action="/register" method="post" novalidate>
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
+        <% if (tokenError) { %>
+            <div class="msg msg--error">Bestätigung des Nutzers konnte nicht durchgeführt werden.</div>
+        <% } %>
     <div class="segment">
         <label for="firstname">Vorname:</label><br>
         <input type="text" id="firstname" name="firstname" placeholder="<%= firstname ? firstname : "" %>" required autocomplete="given-name" autofocus>
