@@ -106,6 +106,7 @@ exports.postRegister = (req, res, next) => {
   const lastname = req.body.lastname;
   const email = req.body.email;
   const password = req.body.password;
+  const department = req.body.department;
   const errors = validationResult(req);
   const salt = 12;
   let confirmToken;
@@ -144,6 +145,7 @@ exports.postRegister = (req, res, next) => {
               firstname: firstname,
               lastname: lastname,
               email: email,
+              department: department,
               hashedPassword: hashedPassword,
               isAdmin: false,
               isActive: false,

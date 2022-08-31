@@ -1,11 +1,14 @@
 const User = require("../models/user");
 const { calcPrice, formatCurrency } = require("../util/calc");
+const { PRICE_PER_CUP, PRICE_FOR_MILK } = require("../util/constants")
 
 exports.getUserStatus = (req, res, next) => {
   User.findOne({ _id: req.session.user._id }).then((user) => {
     res.render("status", {
       balance: formatCurrency(user.currentBalanceInCent),
       cups: user.cupsSinceLastPayment,
+      priceCoffee: formatCurrency(PRICE_PER_CUP),
+      priceMilk: formatCurrency(PRICE_FOR_MILK),
     });
   });
 };

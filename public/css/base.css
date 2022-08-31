@@ -15,6 +15,11 @@ input {
     font-family: inherit;
     width: 220px;
 }
+select {
+    font-size: 0.8em;
+    font-family: inherit;
+    width: 220px;
+}
 hr {
     max-width: 460px;
     min-width: 200px;
@@ -45,6 +50,8 @@ img {
 .msg {
     font-size: 0.8em;
     margin: 10px 0;
+}
+.msg.msg--info {
     color: #35b618;
 }
 .msg.msg--error {

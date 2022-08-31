@@ -6,13 +6,13 @@
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
         <% if (justRegistered) {%>
-            <div class="msg">Vielen Dank für deine Registrierung!<br>Dir wurde ein Link an deine E-Mail Adresse zur Bestätigung geschickt.</div>
+            <div class="msg msg--info">Vielen Dank für deine Registrierung!<br>Dir wurde ein Link an deine E-Mail Adresse zur Bestätigung geschickt.</div>
         <% } else if (resetMessage) { %>
-            <div class="msg">Eine E-Mail zum Zurücksetzen deines Passworts wurde an deine E-Mail Adresse gesendet.</div>
+            <div class="msg msg--info">Eine E-Mail zum Zurücksetzen deines Passworts wurde an deine E-Mail Adresse gesendet.</div>
         <% } else if (passwordSavedMessage) {%>
-            <div class="msg">Das neue Passwort wurde gespeichert. Du kannst dich jetzt einloggen.</div>
+            <div class="msg msg--info">Das neue Passwort wurde gespeichert. Du kannst dich jetzt einloggen.</div>
         <% } else if (emailConfirmed) {%>
-            <div class="msg">Deine E-Mail wurde erfolgreich bestätigt. Du kannst dich jetzt einloggen.</div>
+            <div class="msg msg--info">Deine E-Mail wurde erfolgreich bestätigt. Du kannst dich jetzt einloggen.</div>
         <% } else if (userDeactivated) {%>
             <div class="msg msg--error">Dieser Nutzer ist inaktiv!</div>
         <% } %>
@@ -27,7 +27,7 @@
         <!-- Error Messages go here: -->
         <% if (matchError) {%>
             <div class="msg msg--error">E-Mail oder Passwort falsch!</div>
-            <div class="segment">
+            <div class="msg">
                 Hast du dein Passwort vergessen? Dann kannst du es <a href="/resetpassword">hier zurücksetzen</a>.
             </div>
         <%} else if (loginError) {%>

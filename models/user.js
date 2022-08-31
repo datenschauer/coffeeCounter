@@ -36,6 +36,7 @@ const userSchema = new Schema({
   paymentPending: Boolean,
   currentBalanceInCent: Number,
   cupsSinceLastPayment: Number,
+  department: String,
   drinks: [
     {
       date: {
