@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 });
  */
 
-// SET special variables to localStorage which should be used in EVERY page
+// SET session variables to localStorage which should be used in EVERY page
 app.use(setLocalVariables);
 
 app.use("/", indexRoutes);

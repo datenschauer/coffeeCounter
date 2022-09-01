@@ -1,6 +1,7 @@
 'use strict';
 
 const User = require("../models/user");
+const { validationResult } = require("express-validator")
 const { calcPrice, formatCurrency } = require("../util/calc");
 const { PRICE_PER_CUP, PRICE_FOR_MILK } = require("../util/constants")
 
@@ -35,4 +36,52 @@ exports.postAddCoffee = (req, res, next) => {
     })
     .then(res.redirect("/status"))
     .catch((err) => console.log(err));
+};
+
+exports.getUserAccount = (req, res, next) => {
+  User.findOne({ _id: req.session.user._id }).then((user) => {
+      res.render("account", {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        department: user.department,
+        emailTaken: req.flash("emailTaken")[0],
+        emailValidationError: req.flash("emailValidationError")[0],
+        success: req.flash("success")[0],
+      })
+    }
+  ).catch(err => console.log(err));
+};
+
+exports.postUserAccount = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    req.flash("emailValidationError", true);
+    return res.redirect("/account")
+  } else {
+    User.findOne({email: req.body.email}).then((userExists) => {
+      // check if new email is taken by someone else
+      if (String(userExists._id) !== String(req.session.user._id)) {
+        req.flash("emailTaken", true);
+        return res.redirect("/account")
+      } else {
+        User.findOne({_id: req.session.user._id}).then((user) => {
+          user.firstname = req.body.firstname;
+          user.lastname = req.body.lastname;
+          user.email = req.body.email;
+          user.department = req.body.department;
+          return user.save().then(_ => {
+            // renew session
+            req.session.user = user;
+            req.session.isLoggedIn = true;
+            req.session.save((err) => {
+              console.log(err);
+            });
+            req.flash("success", true);
+            res.redirect("/account")
+          });
+        }).catch(err => console.log(err));
+      }
+    }).catch(err => console.log(err));
+  }
 };

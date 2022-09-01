@@ -56,7 +56,7 @@ exports.postLogin = (req, res, next) => {
     if (!user) {
       req.flash("matchError", true);
       return res.redirect("/login");
-    } else if (user.isActive === false) {
+    } else if (!user.isActive) {
       req.flash("userDeactivated", true);
       return res.redirect("/login");
     }

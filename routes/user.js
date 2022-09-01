@@ -13,6 +13,10 @@ router.post("/add-coffee", isLoggedIn, userController.postAddCoffee);
 
 router.get("/status", isLoggedIn, userController.getUserStatus);
 
+router.get("/account", isLoggedIn, userController.getUserAccount);
+
+router.post("/account", isLoggedIn, userController.postUserAccount);
+
 router.get("/", (req, res, next) => {
   if (req.session.isLoggedIn) {
     res.redirect("/home");

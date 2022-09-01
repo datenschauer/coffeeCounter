@@ -1,0 +1,104 @@
+<%- include('includes/head.ejs') %>
+<%- include('includes/title.ejs') %>
+<%- include('includes/nav.ejs') %>
+
+<form action="/account" method="post" novalidate>
+    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="bubble">
+        <div class="segment">
+            <% if (success) { %>
+                <div class="msg msg--info">Deine Angaben wurden erfolgreich gespeichert!</div>
+            <% } %>
+            <p>Hier kannst du deine Angaben ändern und speichern.</p>
+        </div>
+        <div class="segment">
+            <label for="firstname">Vorname:</label><br>
+            <input type="text" id="firstname" name="firstname" required autocomplete="given-name">
+        </div>
+        <div class="segment">
+            <label for="lastname">Nachname:</label><br>
+            <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
+        </div>
+        <div class="segment">
+            <label for="email">E-Mail:</label><br>
+            <input type="email" id="email" name="email" required autocomplete="email">
+            <% if (emailTaken) { %>
+                <div class="msg msg--error">Diese E-Mail ist schon registriert.</div>
+            <% } else if (emailValidationError) { %>
+                <div class="msg msg--error">Bitte gib eine gültige E-Mail Adresse ein.</div>
+            <%}%>
+        </div>
+        <div class="segment">
+            <label for="department">Lehrstuhl:</label>
+            <br>
+            <select name="department" id="department">
+                <option value="hilbert" <%= department === 'hilbert' ? 'selected' : '' %>>Sven Hilbert</option>
+                <option value="munser-kiefer"<%= department === 'munser-kiefer' ? 'selected' : '' %>>Meike Munser-Kiefer</option>
+                <option value="guest" <%= department === 'guest' ? 'selected' : '' %>>Keiner (Gast)</option>
+            </select>
+        </div>
+    </div>
+    <button id="save-btn" class="button disabled" type="submit" disabled>speichern</button>
+</form>
+
+<div class="segment">
+    <p>Du kannst dein Passwort <a href="resetpassword">hier ändern</a>.</p>
+</div>
+
+</section>
+<script>
+  // fill fields with user values
+    const lastnameInput = document.getElementById("lastname");
+    const lastname = "<%= lastname %>";
+    const firstnameInput = document.getElementById("firstname");
+    const firstname = "<%= firstname %>";
+    const emailInput = document.getElementById("email");
+    const email = "<%= email %>";
+    const departmentSelection = document.getElementById("department");
+    const department = "<%= department %>";
+
+    lastnameInput.value = lastname;
+    firstnameInput.value = firstname;
+    emailInput.value = email;
+
+    // activate button when input is changed
+  const inputs = document.querySelectorAll("input");
+  inputs.forEach(input => input.addEventListener("input", (ev) => toggleButtonOnInput(ev)));
+
+  departmentSelection.addEventListener("change", (ev) => toggleButtonOnSelection(ev));
+
+  function activateButton(btn) {
+    btn.classList.remove("disabled");
+    btn.disabled = false;
+  }
+
+  function deactivateButton(btn) {
+    btn.classList.add("disabled");
+    btn.disabled = true;
+  }
+
+  function toggleButtonOnInput(ev) {
+    const target = ev.target;
+    const button = document.querySelector("#save-btn");
+    if (target.id === 'firstname' && target.value !== firstname) {
+      activateButton(button);
+    } else if (target.id === 'lastname' && target.value !== lastname) {
+      activateButton(button);
+    } else if (target.id === 'email' && target.value !== email) {
+      activateButton(button);
+    } else {
+      deactivateButton(button);
+    }
+  }
+
+  function toggleButtonOnSelection(ev) {
+    const target = ev.target;
+    const button = document.querySelector("#save-btn");
+    if (target.value !== department) {
+      activateButton(button);
+    } else {
+      deactivateButton(button);
+    }
+  }
+</script>
+<%- include('includes/end.ejs') %>
