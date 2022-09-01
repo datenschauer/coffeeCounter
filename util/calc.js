@@ -1,3 +1,5 @@
+'use strict';
+
 const constants = require("../util/constants");
 
 exports.calcPrice = function (cups, milk = false) {

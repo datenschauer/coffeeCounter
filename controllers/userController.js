@@ -1,3 +1,5 @@
+'use strict';
+
 const User = require("../models/user");
 const { calcPrice, formatCurrency } = require("../util/calc");
 const { PRICE_PER_CUP, PRICE_FOR_MILK } = require("../util/constants")

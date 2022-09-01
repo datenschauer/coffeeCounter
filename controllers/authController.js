@@ -1,3 +1,5 @@
+'use strict';
+
 const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
@@ -5,7 +7,21 @@ const sendgridMailer = require("@sendgrid/mail");
 const { validationResult } = require("express-validator")
 const { registeredMessage, passwordResetMessage } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
+const passwordValidator = require("password-validator");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
+// reusable variable for state of forms and errors on register site
+const registerContext = function(req) {
+  return {
+    path: "/register",
+    firstname: req.flash("firstname")[0],
+    lastname: req.flash("lastname")[0],
+    emailTaken: req.flash("emailTaken")[0],
+    emailValidationError: req.flash("emailValidationError")[0],
+    email: req.flash("email")[0],
+    passwordValidationError: req.flash("passwordValidationError")[0],
+    tokenError: req.flash("tokenError")[0]
+  };
+};
 
 exports.getLogin = (req, res, next) => {
   if (req.session.isLoggedIn) {
@@ -89,50 +105,58 @@ exports.getRegister = (req, res, next) => {
   if (req.session.isLoggedIn) {
     res.redirect("/home");
   } else {
-    res.render("auth/register", {
-      path: "/register",
-      firstname: req.flash("firstname")[0],
-      lastname: req.flash("lastname")[0],
-      emailTaken: req.flash("emailTaken")[0],
-      emailValidationError: req.flash("emailValidationError")[0],
-      email: req.flash("email")[0],
-      tokenError: req.flash("tokenError")[0],
-    });
+    res.render("auth/register", registerContext(req));
   }
 };
 
 exports.postRegister = (req, res, next) => {
+  const passwordSchema = new passwordValidator();
+  passwordSchema
+    .is().min(8)
+    .is().max(100)
+    .has().uppercase()
+    .has().lowercase()
+    .has().digits()
+    .has().not().spaces()
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
   const email = req.body.email;
   const password = req.body.password;
   const department = req.body.department;
-  const errors = validationResult(req);
   const salt = 12;
   let confirmToken;
+  // validate Password
+  if (!passwordSchema.validate(password)) {
+    req.flash("passwordValidationError", true);
+    setKeepNamesAndEmail(req, firstname, lastname, email);
+    // set errors and redirect to register
+    return setErrorStatusAndRedirect(req, res);
+  }
+  // validate E-Mail
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     req.flash("emailValidationError", true);
-    return res.status(422).render("auth/register", {
-      path: "/register",
-      firstname: req.flash("firstname")[0],
-      lastname: req.flash("lastname")[0],
-      emailTaken: req.flash("emailTaken")[0],
-      emailValidationError: req.flash("emailValidationError")[0],
-      email: req.flash("email")[0]
-  })}
+    setKeepNamesAndEmail(req, firstname, lastname, email);
+    // set errors and redirect to register
+    return setErrorStatusAndRedirect(req, res);
+  }
   User.findOne({ email: email })
     .then((userDocExists) => {
       // check if a user with this email already exists
       if (userDocExists) {
         req.flash("emailTaken", true);
-        req.flash("firstname", firstname);
-        req.flash("lastname", lastname);
-        req.flash("email", email);
+        setKeepNamesAndEmail(req, firstname, lastname, email);
         return res.redirect("/register");
       }
+      // generate the password hash
       return bcrypt
         .hash(password, salt)
         .then((hashedPassword) => {
+          // We use nodes crypto library to generate a token.
+          // Unfortunately, as 'randomBytes' is a void function, every
+          // code following (like user creation, sending email) is wrapped
+          // inside this function to keep asynchronicity.
+          // Haven't found better solution still...
            crypto.randomBytes(32, (err, buffer) => {
             if (err) {
               console.log(err);
@@ -140,7 +164,6 @@ exports.postRegister = (req, res, next) => {
               return res.redirect("/reset");
             }
             confirmToken = buffer.toString("hex");
-             console.log(`Der Token, nachdem er erstellt wurde! ${confirmToken}`)
             const user = new User({
               firstname: firstname,
               lastname: lastname,
@@ -155,7 +178,6 @@ exports.postRegister = (req, res, next) => {
             });
              req.flash("justRegistered", true);
              res.redirect("/login");
-             console.log(`Der Token, bevor er verschickt wird! ${confirmToken}`)
              const emailMessage = registeredMessage(email, firstname, lastname, confirmToken);
              sendgridMailer.send(emailMessage).then(
                (_) => {},
@@ -285,3 +307,26 @@ exports.postNewPassword = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
+/**
+ * wrapper for setting status 422 and redirecting to register site
+ * @param req Request
+ * @param res Response
+ * @returns set status 422 (Error) and redirect to register site
+ */
+function setErrorStatusAndRedirect(req, res) {
+  return res.status(422).render("auth/register", registerContext(req));
+}
+
+/**
+ * wrapper to keep firstname, lastname and email when redirecting to register site
+ * @param req Request
+ * @param firstname First Name
+ * @param lastname Last Name
+ * @param email E-Mail address
+ */
+function setKeepNamesAndEmail(req, firstname, lastname, email) {
+  req.flash("firstname", firstname);
+  req.flash("lastname", lastname);
+  req.flash("email", email);
+}

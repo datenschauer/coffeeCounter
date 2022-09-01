@@ -1,3 +1,5 @@
+'use strict';
+
 const timeIntervals = {};
 
 timeIntervals.MILLISECOND = 1;

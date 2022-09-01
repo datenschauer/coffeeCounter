@@ -1,3 +1,5 @@
+'use strict';
+
 const { TOKEN_EXPIRATION_IN_MINUTES, BASE_URL } = require("./constants");
 
 exports.registeredMessage = function (email, firstname, lastname, token) {

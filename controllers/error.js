@@ -1,3 +1,5 @@
+'use strict';
+
 exports.get404 = (req, res, next) => {
   res.status(404).render("coffee-not-found", { session: req.session });
 };

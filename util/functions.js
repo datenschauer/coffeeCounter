@@ -1,3 +1,5 @@
+'use strict';
+
 exports.filterByCurrentMonth = function (arrayObj) {
   const currentDate = new Date();
   return arrayObj.filter((obj) => {

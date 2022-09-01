@@ -10,15 +10,15 @@
         <% } %>
     <div class="segment">
         <label for="firstname">Vorname:</label><br>
-        <input type="text" id="firstname" name="firstname" placeholder="<%= firstname ? firstname : "" %>" required autocomplete="given-name" autofocus>
+        <input type="text" id="firstname" name="firstname" required autocomplete="given-name" autofocus>
     </div>
     <div class="segment">
         <label for="lastname">Nachname:</label><br>
-        <input type="text" id="lastname" name="lastname" placeholder="<%= lastname ? lastname : "" %>" required autocomplete="family-name">
+        <input type="text" id="lastname" name="lastname" required autocomplete="family-name">
     </div>
     <div class="segment">
         <label for="email">E-Mail:</label><br>
-        <input type="email" id="email" name="email" placeholder="<%= email ? email : "" %>" required autocomplete="email">
+        <input type="email" id="email" name="email" required autocomplete="email">
         <% if (emailTaken) { %>
         <div class="msg msg--error">Diese E-Mail ist schon registriert.</div>
         <% } else if (emailValidationError) { %>
@@ -27,9 +27,14 @@
     </div>
     <div class="segment">
         <div class="info-overlay hidden" id="info-overlay">Das Passwort muss aus mindestens 8 Zeichen bestehen, muss,
-            Groß- und Kleinbuchstaben, sowie eine Zahl und ein Sonderzeichen (z.B. "/", "-" oder "_") enthalten.</div>
+            Groß- und Kleinbuchstaben, sowie eine Zahl enthalten.</div>
         <label for="password">Passwort:  </label><div class="material-symbols-outlined info" id="pw-help">help</div><br>
         <input type="password" id="password" name="password" required autocomplete="new-password">
+        <% if (passwordValidationError) { %>
+        <div class="msg msg--error">
+            Bitte gib ein gültiges Passwort ein.
+        </div>
+        <% } %>
     </div>
             <div class="segment">
                 <label for="department">Lehrstuhl:</label>
@@ -46,5 +51,15 @@
 
 </section>
 <script>
+    const firstnameInput = document.getElementById("firstname");
+    const firstname = "<%= firstname %>"
+    const lastnameInput = document.getElementById("lastname");
+    const lastname = "<%= lastname %>"
+    const emailInput = document.getElementById("email");
+    const email = "<%= email %>"
+
+    if (firstname.length > 0) { firstnameInput.value = firstname}
+    if (lastname.length > 0) { lastnameInput.value = lastname}
+    if (email.length > 0) { emailInput.value = email}
 </script>
 <%- include('../includes/end.ejs') %>

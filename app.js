@@ -1,3 +1,5 @@
+'use strict';
+
 // IMPORT node specific stuff
 require("dotenv").config();
 const path = require("path");
