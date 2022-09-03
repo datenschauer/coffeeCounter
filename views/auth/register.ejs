@@ -2,7 +2,7 @@
 <%- include('../includes/title.ejs') %>
 <%- include('../includes/nav.ejs') %>
 <h1 class="title">Registrierung</h1>
-<form action="/register" method="post" novalidate>
+<form action="/register" method="post">
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
         <% if (tokenError) { %>

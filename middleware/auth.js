@@ -8,8 +8,8 @@ exports.isLoggedIn = (req, res, next) => {
 };
 
 exports.isAdmin = (req, res, next) => {
-  if (!req.session.user.isAdmin) {
-    return res.redirect("/home");
+  if (!req.session.isAdmin) {
+    return res.redirect("/login");
   }
   next();
 };

@@ -73,7 +73,6 @@ exports.postUserAccount = (req, res, next) => {
           return user.save().then(_ => {
             // renew session
             req.session.user = user;
-            req.session.isLoggedIn = true;
             req.session.save((err) => {
               console.log(err);
             });

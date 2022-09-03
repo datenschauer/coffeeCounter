@@ -108,3 +108,6 @@ dist
 
 # tests
 tests
+
+# deployment
+./deploy.py

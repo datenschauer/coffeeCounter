@@ -23,7 +23,8 @@ const timeIntervals = constants.timeIntervals;
 const { setLocalVariables } = require("./middleware/auth");
 
 // SETUP session storage and management
-const MONGODB_URI = process.env.MONGODB_URI;
+// const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGO_TESTDB_URI;
 
 const sessionStore = new MongoDBStore({
   uri: MONGODB_URI,
@@ -39,6 +40,7 @@ const csrfProtection = csrf();
 // SETUP routes
 const indexRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
 
 // SETUP views
 app.set("views", path.join(__dirname, "views"));
@@ -75,6 +77,7 @@ app.use(setLocalVariables);
 
 app.use("/", indexRoutes);
 app.use("/", authRoutes);
+app.use("/", adminRoutes);
 
 app.use(errorController.get404);
 

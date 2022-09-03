@@ -20,7 +20,6 @@ exports.registeredMessage = function (email, firstname, lastname, token) {
     html: `
     <p>Vielen Dank ${firstname} ${lastname} für deine Registrierung!</p>
     <p>Bitte bestätige deine Registrierung, indem du auf <a href="${confirmURL}">folgenden Link</a> klickst.</p>
-    <p>Dein Token lautet: ${token}</p>
     `,
   };
 };

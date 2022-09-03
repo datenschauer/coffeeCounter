@@ -68,6 +68,7 @@ exports.postLogin = (req, res, next) => {
           // save a new session
           req.session.user = user;
           req.session.isLoggedIn = true;
+          if (user.isAdmin) {req.session.isAdmin = true};
           req.session.save((err) => {
             console.log(err);
           });

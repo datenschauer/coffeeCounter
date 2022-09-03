@@ -6,7 +6,7 @@ const userController = require("../controllers/userController");
 const { isLoggedIn } = require("../middleware/auth");
 
 router.get("/home", isLoggedIn, (req, res, next) => {
-  res.render("home");
+  res.render("home", {user: req.session.user});
 });
 
 router.post("/add-coffee", isLoggedIn, userController.postAddCoffee);

@@ -2,7 +2,7 @@
 <%- include('includes/title.ejs') %>
 <%- include('includes/nav.ejs') %>
 
-<form action="/account" method="post" novalidate>
+<form action="/account" method="post">
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
         <div class="segment">

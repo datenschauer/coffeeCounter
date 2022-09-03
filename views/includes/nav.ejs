@@ -5,9 +5,10 @@
         <div class="menu-btn"><span class="material-symbols-outlined">menu</span></div>
         <div class="menu hidden">
             <ul>
+                <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="/home"><span class="material-symbols-outlined">coffee</span> | Kaffee eintragen</a></li>
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="/status"><span class="material-symbols-outlined">grouped_bar_chart</span> | Statusseite</a></li>
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="/account"><span class="material-symbols-outlined">account_circle</span> | Account</a></li>
-                <li class="<%= session.isLoggedIn ? "" : "hidden" %>">
+                <li class="<%= session.isAdmin ? "" : "hidden" %>"><a href="/admin"><span class="material-symbols-outlined">admin_panel_settings</span> | Administration</a></li>
                     <form action="/logout" method="post">
                         <input class="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="button" type="submit">Log Out</button>
