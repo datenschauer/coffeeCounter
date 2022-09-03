@@ -1,12 +1,13 @@
 'use strict';
 
-const { TOKEN_EXPIRATION_IN_MINUTES, BASE_URL } = require("./constants");
+const { TOKEN_EXPIRATION_IN_MINUTES, BASE_URL, FROM_EMAIL, PAYPAL_LINK, ACCOUNT } = require("./constants");
+const { formatCurrency } = require("./calc");
 
 exports.registeredMessage = function (email, firstname, lastname, token) {
   const confirmURL = `${BASE_URL}/confirm/${token}`;
   return {
     to: `${email}`,
-    from: "stefan.boehringer@posteo.de",
+    from: `${FROM_EMAIL}`,
     subject: "Deine Registrierung im Café Sedanstraße.",
     text: `
     Vielen Dank ${firstname} ${lastname} für deine Registrierung!
@@ -28,7 +29,7 @@ exports.passwordResetMessage = function (email, token) {
   const resetUrl = `${BASE_URL}/reset/${token}`;
   return {
     to: `${email}`,
-    from: "stefan.boehringer@posteo.de",
+    from: `${FROM_EMAIL}`,
     subject: "Zurücksetzen deines Passworts",
     text: `
     Hallo,
@@ -51,5 +52,42 @@ exports.passwordResetMessage = function (email, token) {
     <br>
     <p>Solltest du die Zurücksetzung deines Passworts nicht angefordert haben, ignoriere einfach diese E-Mail.</p>
     `,
+  };
+};
+
+exports.receiveBill = function(firstname, email, cupsSinceLastPayment, currentBalanceInCent) {
+  return {
+    to: `${email}`,
+    from: `${FROM_EMAIL}`,
+    subject: "Du hast eine neue Kaffee Abrechnung.",
+    text: `
+    Hallo ${firstname}.
+    
+    Du hast eine neue Kaffee Abrechnung in Höhe von ${formatCurrency(currentBalanceInCent)} Euro erhalten.
+    
+    Seit deiner letzten Abrechnung hast du ${cupsSinceLastPayment} Tassen Kaffee getrunken.
+    
+    Um die Rechnung zu begleichen, zahle per PayPal, indem du folgenden Link in deinen Browser kopierst:
+    ---------------------------
+    ${PAYPAL_LINK}.
+    ---------------------------
+    
+    Oder überweise den Betrag auf folgendes Konto:
+    Konto Inhaber: ${ACCOUNT.accountee}
+    IBAN: ${ACCOUNT.IBAN}
+    BIC: ${ACCOUNT.BIC}
+    `,
+    html: `
+    <p>Hallo ${firstname}.</p>
+    <p>Du hast eine neue Kaffee Abrechnung in Höhe von ${formatCurrency(currentBalanceInCent)} Euro erhalten.</p>
+    <p>Seit deiner letzten Abrechnung hast du ${cupsSinceLastPayment} Tassen Kaffee getrunken.</p>
+    <p>Um die Rechnung zu begleichen, zahle per <strong>PayPal</strong>, indem du auf folgenden <a href="${PAYPAL_LINK}">Link klickst</a>.</p>
+    <p>Oder überweise den Betrag auf folgendes Konto:</p>
+    <ul>
+      <li>Konto Inhaber: ${ACCOUNT.accountee}</li>
+      <li>IBAN: ${ACCOUNT.IBAN}</li>
+      <li>BIC: ${ACCOUNT.BIC}</li>
+    </ul>
+    `
   };
 };
