@@ -1,3 +1,11 @@
 .bubble.user {
-
+    padding: 0;
+    font-size: 0.9em;
+}
+.compressed {
+    padding: 0 10px;
+}
+.compressed > li {
+    display: inline-block;
+    list-style: none;
 }

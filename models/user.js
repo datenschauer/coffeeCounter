@@ -61,11 +61,19 @@ const userSchema = new Schema({
   ],
   payments: [
     {
-      date: {
+      billDate: {
         type: Date,
         required: true,
       },
-      // TO BE CONTINUED!
+      amount: {
+        type: Number,
+        required: true,
+      },
+      payed: {
+        type: Boolean,
+        default:  false,
+      },
+      payedDate: Date,
     },
   ],
 });

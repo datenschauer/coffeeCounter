@@ -4,11 +4,11 @@ const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const sendgridMailer = require("@sendgrid/mail");
+sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 const { validationResult } = require("express-validator")
 const { registeredMessage, passwordResetMessage } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
 const passwordValidator = require("password-validator");
-sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 // reusable variable for state of forms and errors on register site
 const registerContext = function(req) {
   return {
@@ -176,6 +176,7 @@ exports.postRegister = (req, res, next) => {
               confirmToken: confirmToken,
               currentBalanceInCent: 0,
               cupsSinceLastPayment: 0,
+              payments: [],
             });
              req.flash("justRegistered", true);
              res.redirect("/login");

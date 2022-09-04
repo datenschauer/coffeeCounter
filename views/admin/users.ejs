@@ -4,9 +4,32 @@
 
 <%- include('../includes/nav.ejs') %>
 
-<% for (let user of users) { %>
+<%- include('../includes/functions.ejs') %>
+
+<% for (let user of pendingUsers) { %>
+    <div class="bubble user">
+        <p><strong><%= user.firstname %> <%= user.lastname%>:</strong></p>
+        <% for (let payment of user.payments) { %>
+            <% if (!payment.payed) { %>
+            <% const amount = formatCurrency(payment.amount); %>
+                <strong>Datum: </strong><%= payment.billDate.getDate() %>.<%= payment.billDate.getMonth() + 1 %>.<%= payment.billDate.getFullYear() %>
+                <strong>Betrag: </strong><%= amount %> €
+                <form action="/admin/user-payed/<%= user._id %>/<%= payment._id %>" method="post">
+                    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="button">bezahlt</button>
+                </form>
+        <% }} %>
+    </div>
+<% } %>
+
+<form action="/admin/bill-users" method="post">
+    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+    <button type="submit">neue Abrechnung schicken</button>
+</form>
+
+<% for (let user of billableUsers) { %>
 <div class="bubble user <%= user.paymentPending ? "warning" : "" %>">
-    <ul>
+    <ul class="compressed">
         <li><%= user.firstname %> <%= user.lastname %></li>
         <li>Lehrstuhl: <%= user.department %></li>
         <li>Saldo: <%= user.currentBalanceInCent %></li>

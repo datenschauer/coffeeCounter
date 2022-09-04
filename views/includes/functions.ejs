@@ -1,0 +1,18 @@
+<%
+formatCurrency = function (cent, delimiter = ",") {
+    const rest = Math.abs(cent % 100);
+    let euro, prefix;
+    if (cent < 0) {
+        prefix = "-";
+        euro = Math.abs(Math.ceil(cent / 100));
+    } else {
+        prefix = "";
+        euro = Math.floor(cent / 100);
+    }
+    return rest === 0
+        ? `${prefix}${String(euro)}`
+        : rest < 10
+        ? `${prefix}${String(euro)}${delimiter}0${String(rest)}`
+        : `${prefix}${String(euro)}${delimiter}${String(rest)}`;
+};
+%>
