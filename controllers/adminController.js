@@ -8,44 +8,18 @@ const sendgridMailer = require("@sendgrid/mail");
 const mongoose = require("mongoose");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 
-/**
- * find all users which are billable (are active and have a balance > 0)
- * @param fieldsString "field1 field2 ..." => fields which should be returned from db
- * @returns mongooseSchema
- */
-const getBillableUsers = (fieldsString) => {
-  return User.find({
-    isActive: true,
-    currentBalanceInCent: { $gt: 0 },
-  }, fieldsString) // string of fields to be returned by db
-};
-
-/**
- * find all users which have a payment pending
- * @param fieldsString "field1 field2 ..." => fields which should be returned from db
- * @returns mongooseSchema
- */
-const getUsersWithPaymentPending = (fieldsString) => {
-  return User.find({
-    isActive: true,
-    paymentPending: true,
-  }, fieldsString) // string of fields to be returned by db
-};
-
 exports.getAdminUserManagement = (req, res, next) => {
   // get all users, which are active and have a currentBalanceInCent > 0
-  getBillableUsers("firstname lastname department currentBalanceInCent")
-    .then((billableUsers) => {
-   getUsersWithPaymentPending("firstname lastname department payments")
-     .then((pendingUsers) => {
-       res.render("admin/users", {
-         path: "/admin/users",
-         billableUsers: billableUsers,
-         pendingUsers: pendingUsers,
-       });
-     }
-   ).catch(err => console.log(err));
-  }).catch(err => console.log(err));
+  Promise.all([
+    getBillableUsers("firstname lastname department currentBalanceInCent"),
+    getUsersWithPaymentPending("firstname lastname department payments")
+  ]).then(([billableUsers, pendingUsers]) => {
+            res.render("admin/users", {
+              path: "/admin/users",
+              billableUsers: billableUsers,
+              pendingUsers: pendingUsers,
+            });
+          }).catch(err => console.log(err));
 };
 
 exports.postBillUsers = (req, res, next) => {
@@ -97,7 +71,31 @@ exports.postUserPayed = (req, res, next) => {
       user.paymentPending = false;
     }
     user.save().then((_) => {
-      res.redirect("/admin/users");
+      return res.redirect("/admin/users");
     }).catch(err => console.log(err))
   }).catch(err => console.log(err));
 };
+
+/**
+ * find all users which are billable (are active and have a balance > 0)
+ * @param fieldsString "field1 field2 ..." => fields which should be returned from db
+ * @returns mongooseSchema
+ */
+function getBillableUsers(fieldsString) {
+  return User.find({
+    isActive: true,
+    currentBalanceInCent: { $gt: 0 },
+  }, fieldsString) // string of fields to be returned by db
+}
+
+/**
+ * find all users which have a payment pending
+ * @param fieldsString "field1 field2 ..." => fields which should be returned from db
+ * @returns mongooseSchema
+ */
+function getUsersWithPaymentPending(fieldsString) {
+  return User.find({
+    isActive: true,
+    paymentPending: true,
+  }, fieldsString) // string of fields to be returned by db
+}
