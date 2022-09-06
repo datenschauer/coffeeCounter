@@ -75,17 +75,13 @@ exports.postLogin = (req, res, next) => {
           });
           // set the current Date as last login
           user.lastLogin = new Date();
-          user.save()
-            .then((_) => {
-              // finally redirect the logged in user to /home
-              return res.redirect("/home");
-            })
-            .catch((err) => handleError(err, next));
-        }
-        // if passwords don't match, redirect to /login
-        req.flash("matchError", true);
-        res.redirect("/login");
-      })
+          user.save();
+          return res.redirect("/home");
+        } else {
+          // if passwords don't match, redirect to /login
+          req.flash("matchError", true);
+          return res.redirect("/login");
+        }})
       // if anything goes wrong: redirect to /login
       .catch((err) => {
         req.flash("loginError", true);

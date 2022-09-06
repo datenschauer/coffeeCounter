@@ -62,14 +62,6 @@ app.use(
 app.use(csrfProtection);
 app.use(flash());
 
-// TEMP always show session in log
-/*
-app.use((req, res, next) => {
-  console.log(req.session);
-  next();
-});
- */
-
 // SET session variables to localStorage which should be used in EVERY page
 app.use(setLocalVariables);
 
@@ -78,6 +70,7 @@ app.use("/", authRoutes);
 app.use("/", adminRoutes);
 
 app.use(errorController.get404);
+
 app.use((error, req, res, next) => {
   if (error.httpStatusCode === 500) {
     errorController.get500(req, res, next);
