@@ -7,7 +7,6 @@ const path = require("path");
 // IMPORT node modules
 const express = require("express");
 const mongoose = require("mongoose");
-const logger = require("morgan");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
@@ -47,7 +46,6 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // SETUP middleware
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
