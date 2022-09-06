@@ -9,7 +9,6 @@ const mongoose = require("mongoose");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.getAdminUserManagement = (req, res, next) => {
-  // get all users, which are active and have a currentBalanceInCent > 0
   Promise.all([
     getBillableUsers("firstname lastname department currentBalanceInCent"),
     getUsersWithPaymentPending("firstname lastname department payments")

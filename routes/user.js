@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 const { isLoggedIn } = require("../middleware/auth");
+const { body } = require("express-validator");
 
 router.get("/home", isLoggedIn, (req, res, next) => {
   res.render("home", {user: req.session.user});
@@ -15,7 +16,17 @@ router.get("/status", isLoggedIn, userController.getUserStatus);
 
 router.get("/account", isLoggedIn, userController.getUserAccount);
 
-router.post("/account", isLoggedIn, userController.postUserAccount);
+router.post("/account",
+  [
+    body("email")
+    .isEmail()
+    .withMessage("Bitte gib eine gültige E-Mail Adresse ein.")
+    .normalizeEmail(),
+    body("firstname").trim(),
+    body("lastname").trim(),
+  ],
+  isLoggedIn,
+  userController.postUserAccount);
 
 router.get("/", (req, res, next) => {
   if (req.session.isLoggedIn) {
