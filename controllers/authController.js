@@ -8,7 +8,7 @@ sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 const { validationResult } = require("express-validator")
 const { registeredMessage, passwordResetMessage } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
-const { handleError } = require("../util/functions");
+const { handleError } = require("./error");
 const passwordValidator = require("password-validator");
 // reusable variable for state of forms and errors on register site
 const registerContext = function(req) {
