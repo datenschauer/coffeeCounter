@@ -54,7 +54,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
-    secret: "drink_Some_coffee_in_04",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: timeIntervals.WEEK * 2 },
@@ -80,6 +80,12 @@ app.use("/", authRoutes);
 app.use("/", adminRoutes);
 
 app.use(errorController.get404);
+app.use((error, req, res, next) => {
+  if (error.httpStatusCode === 500) {
+    errorController.get500(req, res, next);
+  }
+})
+
 
 // START server with initial connection to mongodb
 const port = 8000;

@@ -8,6 +8,7 @@ sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 const { validationResult } = require("express-validator")
 const { registeredMessage, passwordResetMessage } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
+const { handleError } = require("../util/functions");
 const passwordValidator = require("password-validator");
 // reusable variable for state of forms and errors on register site
 const registerContext = function(req) {
@@ -70,17 +71,16 @@ exports.postLogin = (req, res, next) => {
           req.session.isLoggedIn = true;
           if (user.isAdmin) {req.session.isAdmin = true};
           req.session.save((err) => {
-            console.log(err);
+            handleError(err, next);
           });
           // set the current Date as last login
           user.lastLogin = new Date();
-          return user
-            .save()
+          user.save()
             .then((_) => {
               // finally redirect the logged in user to /home
-              res.redirect("/home");
+              return res.redirect("/home");
             })
-            .catch((err) => console.log(err));
+            .catch((err) => handleError(err, next));
         }
         // if passwords don't match, redirect to /login
         req.flash("matchError", true);
@@ -89,10 +89,9 @@ exports.postLogin = (req, res, next) => {
       // if anything goes wrong: redirect to /login
       .catch((err) => {
         req.flash("loginError", true);
-        res.redirect("/login");
-        console.log(err);
+        return res.redirect("/login");
       });
-  });
+  }).catch(err => handleError(err, next));
 };
 
 exports.postLogout = (req, res, next) => {
