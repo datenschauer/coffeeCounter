@@ -6,35 +6,42 @@
 
 <%- include('../includes/functions.ejs') %>
 
+<% if (pendingUsers.length >= 1) { %>
+<h3 class="title">Folgende Zahlungen<br>stehen aus:</h3>
+
+<div class="wrapper">
 <% for (let user of pendingUsers) { %>
     <div class="bubble user">
         <p><strong><%= user.firstname %> <%= user.lastname%>:</strong></p>
         <% for (let payment of user.payments) { %>
             <% if (!payment.payed) { %>
             <% const amount = formatCurrency(payment.amount); %>
-                Datum: <strong><%= new Intl.DateTimeFormat("de-DE").format(payment.billDate)%></strong>
-                Betrag: <strong><%= amount %></strong> €
-                <form action="/admin/user-payed/<%= user._id %>/<%= payment._id %>" method="post">
+                Datum: <%= new Intl.DateTimeFormat("de-DE").format(payment.billDate)%>
+                 | Zu zahlen: <strong><%= amount %></strong> €
+                <form action="/admin/user-payed/<%= user._id %>/<%= payment._id %>" method="post" id="amount">
                     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button type="submit" class="button">bezahlt</button>
+                    <div class="segment"><label for="amount">Betrag:</label></div>
+                    <div class="segment"><input type="text" name="amount" class="amount" required></div>
+                    <div class="segment"><button type="submit" class="button payment">bezahlt</button></div>
                 </form>
         <% }} %>
     </div>
 <% } %>
-
-<form action="/admin/bill-users" method="post">
-    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
-    <button type="submit">neue Abrechnung schicken</button>
-</form>
-
-<% for (let user of billableUsers) { %>
-<div class="bubble user <%= user.paymentPending ? "warning" : "" %>">
-    <ul class="compressed">
-        <li><%= user.firstname %> <%= user.lastname %></li>
-        <li>Lehrstuhl: <%= user.department %></li>
-        <li>Saldo: <%= user.currentBalanceInCent %></li>
-    </ul>
 </div>
+    <% } else { %>
+    <h3 class="title">Keine ausstehenden Zahlungen.</h3>
+        <% } %>
+
+<% if (billableUsers.length >= 1) { %>
+    <hr>
+    <div class="bubble">
+        Es können <strong><%= billableUsers.length %></strong> Nutzer*innen abgerechnet werden.
+    </div>
+
+    <form action="/admin/bill-users" method="post">
+        <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit" class="button">neue Abrechnung schicken</button>
+    </form>
 <% } %>
 
 <%- include('../includes/end.ejs') %>

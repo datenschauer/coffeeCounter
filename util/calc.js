@@ -17,7 +17,7 @@ exports.calcPrice = function (cups, milk = false) {
  * @param delimiter (default is comma)
  * @returns {string}
  */
-exports.formatCurrency = function (cent, delimiter = ",") {
+exports.formatCurrency = function(cent, delimiter = ",") {
   const rest = Math.abs(cent % 100);
   let euro, prefix;
   if (cent < 0) {
@@ -33,3 +33,18 @@ exports.formatCurrency = function (cent, delimiter = ",") {
     ? `${prefix}${String(euro)}${delimiter}0${String(rest)}`
     : `${prefix}${String(euro)}${delimiter}${String(rest)}`;
 };
+
+exports.convertStringToCent = function(string, delimiter=".") {
+  let [lhs, rhs] = string.split(delimiter);
+  if (!rhs) {
+    return Number(lhs) * 100;
+  } else if (rhs.length === 1) {
+    return Number(lhs) * 100 + Number(rhs) * 10;
+  } else {
+    if (rhs[0] === "0") {
+      return Number(lhs) * 100 + Number(rhs[1]);
+    } else {
+      return Number(lhs) * 100 + Number(rhs);
+    }
+  }
+}
