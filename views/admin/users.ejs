@@ -12,8 +12,8 @@
         <% for (let payment of user.payments) { %>
             <% if (!payment.payed) { %>
             <% const amount = formatCurrency(payment.amount); %>
-                <strong>Datum: </strong><%= payment.billDate.getDate() %>.<%= payment.billDate.getMonth() + 1 %>.<%= payment.billDate.getFullYear() %>
-                <strong>Betrag: </strong><%= amount %> €
+                Datum: <strong><%= new Intl.DateTimeFormat("de-DE").format(payment.billDate)%></strong>
+                Betrag: <strong><%= amount %></strong> €
                 <form action="/admin/user-payed/<%= user._id %>/<%= payment._id %>" method="post">
                     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" class="button">bezahlt</button>

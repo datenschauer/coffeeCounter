@@ -10,6 +10,7 @@ const { registeredMessage, passwordResetMessage } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
 const { handleError } = require("./error");
 const passwordValidator = require("password-validator");
+
 // reusable variable for state of forms and errors on register site
 const registerContext = function(req) {
   return {
