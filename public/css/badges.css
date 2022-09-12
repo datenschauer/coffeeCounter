@@ -30,7 +30,7 @@
     border-radius: 10px;
 }
 .upper {
-    background-color: #ff540e;
+    background-color: #ff4d12;
     padding: 15px 10px 13px 10px;
     border-bottom: 3px solid whitesmoke;
     border-top-left-radius: 7px;
@@ -68,7 +68,7 @@
     float: left;
     padding: 4px 5px 4px 15px;
     min-width: 75px;
-    background-color: #ff540e;
+    background-color: #ff4d12;
     margin: 0;
 }
 .right {

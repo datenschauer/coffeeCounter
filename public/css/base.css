@@ -55,13 +55,13 @@ img {
     color: #35b618;
 }
 .msg.msg--error {
-    color: #ff540e;
+    color: #ff4d12;
 }
 .hidden {
     display: none;
 }
 .main {
-    background-color: #7ebeee;
+    background-color: #0090f1;
     border: none;
     border-radius: 5px;
     padding: 5px 10px 5px 10px;
@@ -97,7 +97,7 @@ img {
     z-index: 99;
 }
 .menu-btn:hover {
-    color: #ff540e;
+    color: #ff4d12;
     cursor: pointer;
 }
 .menu {
@@ -125,7 +125,7 @@ img {
     font-weight: 400;
 }
 .menu > ul > li > a:hover {
-    color: #ff540e;
+    color: #ff4d12;
 }
 li.hidden {
     display: none;
@@ -134,7 +134,7 @@ li.hidden {
     font-family: inherit;
     font-size: 1em;
     margin: 20px 0;
-    background-color: #ff540e;
+    background-color: #ff4d12;
     color: whitesmoke;
     padding: 5px 10px 5px 10px;
     text-align: center;
@@ -186,7 +186,7 @@ li.hidden {
     margin: 3px;
 }
 span.count {
-    color: #ff540e;
+    color: #ff4d12;
     /*text-shadow: 0 0 3px #0c0f19;*/
     font-weight: 500;
 }
