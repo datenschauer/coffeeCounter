@@ -1,9 +1,10 @@
 'use strict';
 
 const User = require("../models/user");
+const Purchase = require("../models/purchases");
 const { validationResult } = require("express-validator")
-const { calcPrice, formatCurrency } = require("../util/calc");
-const { PRICE_PER_CUP, PRICE_FOR_MILK } = require("../util/constants")
+const { calcPrice, formatCurrency, convertStringToCent } = require("../util/calc");
+const { PRICE_PER_CUP, PRICE_FOR_MILK, timeIntervals } = require("../util/constants")
 
 exports.getUserStatus = (req, res, next) => {
   User.findOne({ _id: req.session.user._id }).then((user) => {
@@ -24,8 +25,10 @@ exports.postAddCoffee = (req, res, next) => {
     .then((user) => {
       const currentBalance = Number(user.currentBalanceInCent);
       const currentCups = Number(user.cupsSinceLastPayment);
+      let dt = new Date();
+      dt = new Date(dt.getTime() + timeIntervals.HOUR * 2);
       user.drinks.push({
-        date: Date(),
+        date: dt,
         cups: cups,
         withMilk: milk,
         priceInCent: price,
@@ -83,4 +86,43 @@ exports.postUserAccount = (req, res, next) => {
       }
     }).catch(err => console.log(err));
   }
+};
+
+exports.getPurchase = (req, res, next) => {
+  User.findOne({ _id: req.session.user._id }).then((user) => {
+    res.render("purchase", {
+      firstname: user.firstname,
+    })
+  })
+};
+
+exports.postPurchase = (req, res, next) => {
+  const description = req.body.description;
+  const priceString = req.body.price;
+  let dt = new Date();
+  dt = new Date(dt.getTime() + timeIntervals.HOUR * 2);
+  let price = null;
+  try {
+    if (priceString.includes(",")) {
+      price = convertStringToCent(priceString);
+    } else {
+      price = convertStringToCent(priceString, ".");
+    }
+  } catch (e) {
+    console.log(e);
+  }
+  User.findOne({ _id: req.session.user._id }).then((user) => {
+    const purchase = new Purchase({
+      description: description,
+      price: price,
+      date: dt,
+      userName: `${user.firstname} ${user.lastname}`,
+      userId: user._id,
+      userDepartment: user.department,
+      paid: false,
+    });
+    return purchase.save()
+      .then(_ => res.redirect("/home"))
+      .catch(err => console.log(err));
+  }).catch(err => console.log(err));
 };

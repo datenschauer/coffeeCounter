@@ -1,0 +1,53 @@
+<%- include('includes/head.ejs') %>
+<%- include('includes/title.ejs') %>
+<%- include('includes/nav.ejs') %>
+
+<form action="/purchase" method="post">
+    <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="bubble">
+        <p>Hier kannst du eintragen, wenn du etwas für den Kaffeegenuss in der Sedanstraße gekauft hast.</p>
+        <div class="segment">
+        <label for="description">Beschreibung:</label><br>
+            <input type="text" id="description" name="description" placeholder="Bsp.: 6x Milch" required minlength="3">
+        </div>
+        <div class="segment">
+            <label for="price">Preis:</label><br>
+            <input type="text" id="price" name="price" placeholder="in Euro; bspw.: 3,50" required>
+        </div>
+        <div class="segment">
+            <button type="submit" id="coffee-btn" class="button disabled" disabled>abschicken</button>
+        </div>
+    </div>
+</form>
+
+<script>
+      const description = document.getElementById("description");
+      const price = document.getElementById("price");
+      const inputs = [description, price];
+
+      const enableButton = () => {
+        const button = document.querySelector("#coffee-btn");
+        button.classList.remove("disabled");
+        button.disabled = false;
+      };
+
+      const disableButton = () => {
+        const button = document.querySelector("#coffee-btn");
+        button.classList.add("disabled");
+        button.disabled = true;
+      };
+
+      inputs.forEach(input => {
+        input.addEventListener("input", () => {
+          if (description.value.length > 0 && price.value.length > 0) {
+            enableButton();
+          } else {
+            disableButton();
+          }
+        })
+      })
+
+</script>
+
+</section>
+<%- include('includes/end.ejs') %>

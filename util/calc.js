@@ -34,7 +34,7 @@ exports.formatCurrency = function(cent, delimiter = ",") {
     : `${prefix}${String(euro)}${delimiter}${String(rest)}`;
 };
 
-exports.convertStringToCent = function(string, delimiter=".") {
+exports.convertStringToCent = function(string, delimiter=",") {
   let [lhs, rhs] = string.split(delimiter);
   if (!rhs) {
     return Number(lhs) * 100;

@@ -3,6 +3,11 @@
 const { TOKEN_EXPIRATION_IN_MINUTES, BASE_URL, FROM_EMAIL, PAYPAL_LINK, ACCOUNT } = require("./constants");
 const { formatCurrency } = require("./calc");
 
+function getDepartmentFullname(department) {
+  return department === "hilbert" ? "Hilbert" :
+      department === "munser-kiefer" ? "Munser-Kiefer" : "kein Lehrstuhl (Gast)"
+}
+
 exports.registeredMessage = function (email, firstname, lastname, token) {
   const confirmURL = `${BASE_URL}/confirm/${token}`;
   return {
@@ -23,6 +28,32 @@ exports.registeredMessage = function (email, firstname, lastname, token) {
     <p>Bitte bestätige deine Registrierung, indem du auf <a href="${confirmURL}">folgenden Link</a> klickst.</p>
     `,
   };
+};
+
+exports.adminMessageAtRegistration = function(adminEmail, firstname, lastname, userEmail, department) {
+  return {
+    to: `${adminEmail}`,
+    from: `${FROM_EMAIL}`,
+    subject: `[Info:] Neue Nutzerregistrierung im Cafe Sedanstrasse`,
+    text: `
+    Ein(e) neue Nutzer*in hat sich in der WebApp "Café Sedanstraße" registriert.
+    -------------------------------------
+    Name: ${firstname} ${lastname}
+    E-Mail: ${userEmail}
+    Lehrstuhl: ${getDepartmentFullname(department)}
+    -------------------------------------
+    `,
+    html: `
+    <p>Ein(e) neue Nutzer*in hat sich in der WebApp "Café Sedanstraße" registriert.</p>
+    <hr>
+    <ul>
+      <li><strong>Name:</strong> ${firstname} ${lastname}</li>
+      <li><strong>E-Mail:</strong> ${userEmail}</li>
+      <li><strong>Lehrstuhl:</strong> ${getDepartmentFullname(department)}</li>
+    </ul>
+    <hr>
+    `,
+  }
 };
 
 exports.passwordResetMessage = function (email, token) {

@@ -28,6 +28,10 @@ router.post("/account",
   isLoggedIn,
   userController.postUserAccount);
 
+router.get("/purchase", isLoggedIn, userController.getPurchase);
+
+router.post("/purchase", isLoggedIn, userController.postPurchase);
+
 router.get("/", (req, res, next) => {
   if (req.session.isLoggedIn) {
     res.redirect("/home");

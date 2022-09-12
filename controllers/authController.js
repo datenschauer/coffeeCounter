@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const sendgridMailer = require("@sendgrid/mail");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 const { validationResult } = require("express-validator")
-const { registeredMessage, passwordResetMessage } = require("../util/messages");
+const { registeredMessage, passwordResetMessage, adminMessageAtRegistration } = require("../util/messages");
 const { timeIntervals } = require("../util/constants");
 const { handleError } = require("./error");
 const passwordValidator = require("password-validator");
@@ -75,7 +75,9 @@ exports.postLogin = (req, res, next) => {
             handleError(err, next);
           });
           // set the current Date as last login
-          user.lastLogin = new Date();
+          let dt = new Date();
+          dt = new Date(dt.getTime() + timeIntervals.HOUR * 2); // correct for TZ
+          user.lastLogin = dt;
           user.save();
           return res.redirect("/home");
         } else {
@@ -176,8 +178,8 @@ exports.postRegister = (req, res, next) => {
             });
              req.flash("justRegistered", true);
              res.redirect("/login");
-             const emailMessage = registeredMessage(email, firstname, lastname, confirmToken);
-             sendgridMailer.send(emailMessage).then(
+             const emailUserMessage = registeredMessage(email, firstname, lastname, confirmToken);
+             sendgridMailer.send(emailUserMessage).then(
                (_) => {},
                (error) => {
                  console.log(error);
@@ -186,6 +188,26 @@ exports.postRegister = (req, res, next) => {
                  }
                }
              );
+             User.find({ isAdmin: true }).then((adminUsers) => {
+               for (let admin of adminUsers) {
+                 const emailAdminMessage = adminMessageAtRegistration(
+                   admin.email,
+                   firstname,
+                   lastname,
+                   email,
+                   department,
+                 );
+                 sendgridMailer.send(emailAdminMessage).then(
+                   (_) => {},
+                   (error) => {
+                     console.log(error);
+                     if (error.response) {
+                       console.log(error.response.body);
+                     }
+                   }
+                 ).catch(err => console.log(err));
+               }
+             })
           return user.save();
         })
         })
