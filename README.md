@@ -17,10 +17,12 @@ So a little `docker-compose up` command should do the work. But before that some
 
 ### 1. Prepare the .env file
 
-an `.env` file in the root folder holds some of the variables like a secret string, account information, API keys etc. which should be kept secret.
+An `.env` file in the root folder holds some of the variables like a secret string, account information, API keys etc. which should be kept secret.
 
 The app uses [MongoDB](https://www.mongodb.com/atlas/database) as a Database backend (more specifically I use [MongoDB Atlas](https://www.mongodb.com/atlas)) as a backend.
 Furthermore [Sendgrid](https://sendgrid.com/) is used as a service for sending emails securely and performantly. 
+
+**Create an file named `.env` in the root folder and prepare the following variables:**
 
 ```shell
 SENDGRID_API_KEY='Your Sendgrid API Key' # get the key here: https://docs.sendgrid.com/ui/account-and-settings/api-keys
