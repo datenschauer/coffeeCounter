@@ -29,12 +29,12 @@
             BIC: <strong><%= process.env.BIC %></strong>
         </p>
         <p class="notification-description dark">
-            Hast du schon bezahlt? Ignoriere diese Nachricht. Es dauert etwas bis die Admins deine Zahlung eingetragen haben. 😇
+            Hast du schon bezahlt? Ignoriere diese Nachricht. Es dauert etwas, bis die Admins deine Zahlung eingetragen haben. 😇
         </p>
     </div>
 
     <div class="notification">
-        <span class="material-symbols-outlined">fmd_bad</span>
+        <span class="material-symbols-outlined">exclamation</span>
     </div>
 
     <script>
@@ -43,11 +43,13 @@
       const openExclamationMark = document.querySelector(".notification");
 
       function turnOffMessage() {
+        notificationContainer.classList.remove('slidein');
         notificationContainer.classList.add('hidden');
       }
 
       function turnOnMessage() {
         notificationContainer.classList.remove('hidden');
+        notificationContainer.classList.add('slidein');
       }
 
       closeIconNotificationContainer.addEventListener("click", () => {

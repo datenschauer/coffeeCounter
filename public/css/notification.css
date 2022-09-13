@@ -7,8 +7,13 @@
     background-color: #ff6090;
     position: fixed;
     left: 50%;
+    top: 115px;
     transform: translate(-50%, 0);
     margin: auto;
+}
+.notification-container.slidein {
+    animation-duration: 750ms;
+    animation-name: slidein;
 }
 .notification-container.hidden {
     display: none;
@@ -37,13 +42,14 @@ p.notification-close-icon:hover {
 }
 .notification {
     position: fixed;
-    right: 7%;
+    right: calc(50% - 112px);
+    top: 120px;
     font-size: 1.5rem;
     color: whitesmoke;
     background-color: #e91e63;
     border: 2px solid whitesmoke;
     border-radius: 100%;
-    padding: 5px;
+    padding: 2px;
 }
 .notification:hover {
     cursor: pointer;
@@ -59,8 +65,12 @@ p.notification-close-icon:hover {
     .notification-container {
         width: 400px;
     }
-    .notification {
-        position: fixed;
-        right: 25%;
+}
+@keyframes slidein {
+    from {
+        top: 0;
+    }
+    to {
+        top: 115px;
     }
 }

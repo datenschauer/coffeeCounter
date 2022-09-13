@@ -196,7 +196,7 @@ a.logo {
     height: 67px;
     margin: 0;
     padding: 0;
-    text-indent: -25px;
+    text-indent: -15px;
 }
 .bubble {
     align-self: center;
@@ -255,7 +255,7 @@ a.logo {
 }
 
 @media only screen and (max-width: 300px) {
-    .logo {
+    a.logo {
         display: none;
     }
     .header {
