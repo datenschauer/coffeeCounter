@@ -7,6 +7,36 @@
 
     <%- include('includes/nav.ejs') %>
 
+<% if (session.user.paymentPending) { %>
+    <div class="notification-container hidden">
+        <div class="notification">
+            <div class="notification-header">
+                <p class="notification-title">NEUE EVALUATION</p>
+                <img class="notification-close-icon" src="{% static 'icons/close.svg' %}" alt="close icon">
+            </div>
+            <p class="notification-description">Es wurde eine E-Mail an <b class="notification-mail"></b>
+                versendet, mit dem Link zur Statusseite. Auf der Statusseite können Sie die Umfrage verwalten und den
+                aktuellen Stand der Umfrage einsehen.</p>
+        </div>
+    </div>
+
+    <script>
+      let notificationContainer = document.querySelector(".notification-container");
+      let closeIconNotificationContainer = document.querySelector(".notification-close-icon");
+
+      function turnOffMessage() {
+        notificationContainer.style.display = 'none';
+      }
+
+      closeIconNotificationContainer.addEventListener("click", () => {
+        turnOffMessage();
+      });
+
+      setTimeout(turnOffMessage, 200000)
+    </script>
+
+<% } %>
+
 <div class="bubble">
     <p>Hallo <%= session.user.firstname %>!</p>
     <p>Wie viel Kaffee hast du heute getrunken?</p>

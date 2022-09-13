@@ -58,3 +58,4 @@ If you change stuff after initially built the container:
 - [Material Color Palette](https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=1A237E&secondary.color=E91E63) 
 - [Material Symbols and Icons](https://fonts.google.com/icons)
 - [Icons8](https://icons8.com/icons)
+- [Osano ConsentManagement](https://www.osano.com/products/consent-management)
