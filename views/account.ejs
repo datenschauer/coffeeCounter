@@ -5,12 +5,11 @@
 <form action="/account" method="post">
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
-        <div class="segment">
             <% if (success) { %>
                 <div class="msg msg--info">Deine Angaben wurden erfolgreich gespeichert!</div>
             <% } %>
             <p>Hier kannst du deine Angaben ändern und speichern.</p>
-        </div>
+    </div>
         <div class="segment">
             <label for="firstname">Vorname:</label><br>
             <input type="text" id="firstname" name="firstname" required autocomplete="given-name">
@@ -37,7 +36,6 @@
                 <option value="guest" <%= department === 'guest' ? 'selected' : '' %>>Keiner (Gast)</option>
             </select>
         </div>
-    </div>
     <button id="save-btn" class="button disabled" type="submit" disabled>speichern</button>
 </form>
 
@@ -45,7 +43,6 @@
     <p>Du kannst dein Passwort <a href="resetpassword">hier ändern</a>.</p>
 </div>
 
-</section>
 <script>
   // fill fields with user values
     const lastnameInput = document.getElementById("lastname");

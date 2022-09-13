@@ -30,7 +30,7 @@
     border-radius: 10px;
 }
 .upper {
-    background-color: #ff4d12;
+    background-color: #e91e63;
     padding: 15px 10px 13px 10px;
     border-bottom: 3px solid whitesmoke;
     border-top-left-radius: 7px;
@@ -38,7 +38,7 @@
 }
 .lower {
     padding: 8px 10px;
-    background-color: #287ae1;
+    background-color: #1a237e;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 }

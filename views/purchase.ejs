@@ -6,6 +6,7 @@
     <input class="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="bubble">
         <p>Hier kannst du eintragen, wenn du etwas für den Kaffeegenuss in der Sedanstraße gekauft hast.</p>
+    </div>
         <div class="segment">
         <label for="description">Beschreibung:</label><br>
             <input type="text" id="description" name="description" placeholder="Bsp.: 6x Milch" required minlength="3">
@@ -17,7 +18,6 @@
         <div class="segment">
             <button type="submit" id="coffee-btn" class="button disabled" disabled>abschicken</button>
         </div>
-    </div>
 </form>
 
 <script>
@@ -49,5 +49,4 @@
 
 </script>
 
-</section>
 <%- include('includes/end.ejs') %>
