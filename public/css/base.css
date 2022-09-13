@@ -43,7 +43,7 @@ a {
 p, label {
     color: #ffffff;
 }
-img {
+img.full {
     padding: 0;
     margin: 0;
     width: 100%;
@@ -78,7 +78,7 @@ img {
     align-items: flex-start;
     height: 75px;
 }
-.title, .logo, .menu-btn {
+.title, .menu-btn {
     align-self: center;
     color: #ffffff;
     font-weight: 500;
@@ -88,13 +88,6 @@ img {
 }
 .title > h1 {
     margin: 0;
-}
-.logo {
-    font-size: 1.8em;
-}
-.logo > a {
-    text-decoration: none;
-    color: inherit;
 }
 .menu-btn {
     font-size: 1.8em;
@@ -194,6 +187,13 @@ span.count {
     color: #e91e63;
     /*text-shadow: 0 0 3px #0c0f19;*/
     font-weight: 500;
+}
+a.logo {
+    width: 67px;
+    height: 67px;
+    margin: 0;
+    padding: 0;
+    text-indent: -25px;
 }
 .bubble {
     align-self: center;
