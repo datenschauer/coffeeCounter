@@ -35,6 +35,9 @@ exports.formatCurrency = function(cent, delimiter = ",") {
 };
 
 exports.convertStringToCent = function(string, delimiter=",") {
+  if (string.includes(".")) {
+    delimiter = ".";
+  }
   let [lhs, rhs] = string.split(delimiter);
   if (!rhs) {
     return Number(lhs) * 100;

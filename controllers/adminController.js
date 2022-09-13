@@ -6,6 +6,7 @@ const { timeIntervals } = require("../util/constants")
 const { receiveBill } = require("../util/messages");
 const sendgridMailer = require("@sendgrid/mail");
 const mongoose = require("mongoose");
+const { convertStringToCent } = require("../util/calc");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.getAdminUserManagement = (req, res, next) => {
@@ -45,22 +46,21 @@ exports.postBillUsers = (req, res, next) => {
             }
           );
           user.cupsSinceLastPayment = 0;
-          user.currentBalanceInCent = 0;
           user.paymentPending = true;
           user.payments.push({
             billDate: new Date(),
             amount: currentBalanceInCent,
             payed: false,
           });
-          user.save();
+          user.save().then(res.redirect("/admin/users"));
       }
-        return res.redirect("/admin/users");
     }).catch(err => console.log(err));
 };
 
 exports.postUserPayed = (req, res, next) => {
   const userId = req.params.userid;
   const paymentId = req.params.paymentid;
+  const amount = convertStringToCent(req.body.amount);
   User.findById(userId).then((user) => {
     const result = user.payments.find(({ _id }) => String(_id) === paymentId);
     result.payed = true;
@@ -69,6 +69,8 @@ exports.postUserPayed = (req, res, next) => {
     if (!anyOpenPayments) {
       user.paymentPending = false;
     }
+    const currentBalance = user.currentBalanceInCent;
+    user.currentBalanceInCent = currentBalance - amount;
     user.save().then((_) => {
       return res.redirect("/admin/users");
     }).catch(err => console.log(err))

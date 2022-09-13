@@ -8,11 +8,20 @@ const { PRICE_PER_CUP, PRICE_FOR_MILK, timeIntervals } = require("../util/consta
 
 exports.getUserStatus = (req, res, next) => {
   User.findOne({ _id: req.session.user._id }).then((user) => {
+    const anyPayments = getOpenPayments(user.payments);
+    let payments;
+    if (anyPayments) {
+      payments = anyPayments;
+    }  else {
+      payments = [];
+    }
     res.render("status", {
       balance: formatCurrency(user.currentBalanceInCent),
       cups: user.cupsSinceLastPayment,
       priceCoffee: formatCurrency(PRICE_PER_CUP),
       priceMilk: formatCurrency(PRICE_FOR_MILK),
+      paymentPending: user.paymentPending,
+      payments: payments,
     });
   });
 };
@@ -35,9 +44,8 @@ exports.postAddCoffee = (req, res, next) => {
       });
       user.cupsSinceLastPayment = currentCups + cups;
       user.currentBalanceInCent = currentBalance + price;
-      return user.save();
+      user.save().then(res.redirect("/status"));
     })
-    .then(res.redirect("/status"))
     .catch((err) => console.log(err));
 };
 
@@ -126,3 +134,13 @@ exports.postPurchase = (req, res, next) => {
       .catch(err => console.log(err));
   }).catch(err => console.log(err));
 };
+
+/**
+ * A function to find open payments of an individual user
+ */
+function getOpenPayments(payments) {
+  const openPayments = payments.find((payment) => {
+    return !payment.payed;
+  })
+  return openPayments ? openPayments : undefined;
+}

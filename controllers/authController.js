@@ -53,6 +53,7 @@ exports.postLogin = (req, res, next) => {
       isAdmin: 1,
       hashedPassword: 1,
       isActive: 1,
+      paymentPending: 1,
     }
   ).then((user) => {
     if (!user) {

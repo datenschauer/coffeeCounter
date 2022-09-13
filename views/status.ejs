@@ -1,11 +1,69 @@
+<%- include('includes/functions.ejs') %>
+
 <%- include('includes/head.ejs') %>
 <link rel="stylesheet" href="/css/badges.css">
+<link rel="stylesheet" href="/css/notification.css">
 
 <%- include('includes/title.ejs') %>
 
 <%- include('includes/nav.ejs') %>
 
-    <div class="flex-wrapper">
+<% if (paymentPending) { %>
+    <div class="notification-container">
+        <div class="notification-header">
+            <p class="notification-title">Neue Abrechnung!</p>
+            <p class="notification-close-icon"><span class="material-symbols-outlined">close</span></p>
+        </div>
+        <p class="notification-description">
+            Datum: <strong><%= new Intl.DateTimeFormat("de-DE").format(payments.date) %></strong>
+            <br>
+            Betrag: <strong><%= formatCurrency(payments.amount) %>&euro;</strong>
+        </p>
+        <p class="notification-description">
+            Bezahle per <strong>PayPal</strong>: <strong><a class="dark" href="<%= process.env.PAYPAL_LINK %>" target="_blank">klicke hier!</a></strong>
+        </p>
+        <p class="notification-description">
+            Oder überweise an:<br>
+            Kontoinhaber: <strong><%= process.env.ACOUNTEE %></strong><br>
+            IBAN: <strong><%= process.env.IBAN %></strong><br>
+            BIC: <strong><%= process.env.BIC %></strong>
+        </p>
+        <p class="notification-description dark">
+            Hast du schon bezahlt? Ignoriere diese Nachricht. Es dauert etwas bis die Admins deine Zahlung eingetragen haben. 😇
+        </p>
+    </div>
+
+    <div class="notification">
+        <span class="material-symbols-outlined">fmd_bad</span>
+    </div>
+
+    <script>
+      const notificationContainer = document.querySelector(".notification-container");
+      const closeIconNotificationContainer = document.querySelector(".notification-close-icon");
+      const openExclamationMark = document.querySelector(".notification");
+
+      function turnOffMessage() {
+        notificationContainer.classList.add('hidden');
+      }
+
+      function turnOnMessage() {
+        notificationContainer.classList.remove('hidden');
+      }
+
+      closeIconNotificationContainer.addEventListener("click", () => {
+        turnOffMessage();
+      });
+
+      openExclamationMark.addEventListener("click", () => {
+        turnOnMessage();
+      })
+
+      setTimeout(turnOffMessage, 7000)
+    </script>
+
+<% } %>
+
+<div class="flex-wrapper">
         <div class="vertical-container">
             <div class="upper">
                 <%= cups %>

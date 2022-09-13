@@ -40,6 +40,9 @@ a {
     text-decoration: none;
     color: #ff6090;
 }
+a.dark {
+    color: #b0003a;
+}
 p, label {
     color: #ffffff;
 }
