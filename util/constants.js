@@ -17,8 +17,8 @@ exports.PRICE_FOR_MILK = 15;
 
 exports.TOKEN_EXPIRATION_IN_MINUTES = 30;
 
-// exports.BASE_URL = process.env.BASE_URL;
-exports.BASE_URL = 'http://localhost:8000';
+exports.BASE_URL = process.env.BASE_URL;
+// exports.BASE_URL = 'http://localhost:8000';
 
 exports.FROM_EMAIL = process.env.FROM_EMAIL;
 
