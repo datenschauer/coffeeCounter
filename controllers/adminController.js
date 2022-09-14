@@ -1,15 +1,12 @@
 'use strict';
 
-const crypto = require("crypto");
 const User = require("../models/user");
-const { timeIntervals } = require("../util/constants")
 const { receiveBill } = require("../util/messages");
 const sendgridMailer = require("@sendgrid/mail");
-const mongoose = require("mongoose");
 const { convertStringToCent } = require("../util/calc");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 
-exports.getAdminUserManagement = (req, res, next) => {
+exports.getAdminUserManagement = (req, res) => {
   Promise.all([
     getBillableUsers("firstname lastname department currentBalanceInCent"),
     getUsersWithPaymentPending("firstname lastname department payments")
@@ -22,7 +19,7 @@ exports.getAdminUserManagement = (req, res, next) => {
           }).catch(err => console.log(err));
 };
 
-exports.postBillUsers = (req, res, next) => {
+exports.postBillUsers = (req, res) => {
   getBillableUsers("firstname email currentBalanceInCent cupsSinceLastPayment payments")
     .then((users) => {
       for (let user of users) {
@@ -57,7 +54,7 @@ exports.postBillUsers = (req, res, next) => {
     }).catch(err => console.log(err));
 };
 
-exports.postUserPayed = (req, res, next) => {
+exports.postUserPayed = (req, res) => {
   const userId = req.params.userid;
   const paymentId = req.params.paymentid;
   const amount = convertStringToCent(req.body.amount);
@@ -86,6 +83,7 @@ function getBillableUsers(fieldsString) {
   return User.find({
     isActive: true,
     currentBalanceInCent: { $gt: 0 },
+    paymentPending: false,
   }, fieldsString) // string of fields to be returned by db
 }
 
