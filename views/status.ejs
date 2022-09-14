@@ -9,7 +9,7 @@
 <%- include('includes/nav.ejs') %>
 
 <% if (paymentPending) { %>
-    <div class="notification-container">
+    <div class="notification-container hidden">
         <div class="notification-header">
             <p class="notification-title">Neue Abrechnung!</p>
             <p class="notification-close-icon"><span class="material-symbols-outlined">close</span></p>
@@ -34,33 +34,49 @@
     </div>
 
     <div class="notification">
-        <span class="material-symbols-outlined">exclamation</span>
+        <div class="notification-banner">
+            <p class="notification-title">
+                Neue Abrechnung erhalten <span class="material-symbols-outlined">exclamation</span>
+            </p>
+        </div>
+        <div class="notification-marker">
+            <span class="material-symbols-outlined">exclamation</span>
+        </div>
     </div>
 
     <script>
       const notificationContainer = document.querySelector(".notification-container");
       const closeIconNotificationContainer = document.querySelector(".notification-close-icon");
       const openExclamationMark = document.querySelector(".notification");
+      const notificationBanner = document.querySelector(".notification-banner");
+      const notificationMarker = document.querySelector(".notification-marker");
 
-      function turnOffMessage() {
-        notificationContainer.classList.remove('slidein');
-        notificationContainer.classList.add('hidden');
+      function turnOffMessage(instance) {
+        instance.classList.remove('slidein');
+        instance.classList.add('hidden');
       }
 
-      function turnOnMessage() {
-        notificationContainer.classList.remove('hidden');
-        notificationContainer.classList.add('slidein');
+      function turnOnMessage(instance) {
+        instance.classList.remove('hidden');
+        instance.classList.add('slidein');
+      }
+
+      function shrinkMessage() {
+        notificationBanner.classList.add("hidden");
+        openExclamationMark.classList.add("shrink");
+        notificationMarker.classList.add("appear");
       }
 
       closeIconNotificationContainer.addEventListener("click", () => {
-        turnOffMessage();
+        turnOffMessage(notificationContainer);
       });
 
       openExclamationMark.addEventListener("click", () => {
-        turnOnMessage();
+        turnOnMessage(notificationContainer);
       })
 
-      setTimeout(turnOffMessage, 3000)
+      setTimeout(shrinkMessage, 1000);
+
     </script>
 
 <% } %>
