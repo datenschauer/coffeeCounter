@@ -11,9 +11,9 @@ timeIntervals.WEEK = timeIntervals.DAY * 7;
 
 exports.timeIntervals = timeIntervals;
 
-exports.PRICE_PER_CUP = 25;
+exports.PRICE_PER_CUP = 30;
 
-exports.PRICE_FOR_MILK = 15;
+exports.PRICE_FOR_MILK = 10;
 
 exports.TOKEN_EXPIRATION_IN_MINUTES = 30;
 
