@@ -20,6 +20,7 @@ const errorController = require(path.join(__dirname, "controllers", "error"));
 const constants = require("./util/constants");
 const timeIntervals = constants.timeIntervals;
 const { setLocalVariables } = require("./middleware/auth");
+const Register = require("./models/register");
 
 // SETUP session storage and management
 // const MONGODB_URI = process.env.MONGODB_URI;
@@ -84,8 +85,25 @@ const port = 8000;
 mongoose
   .connect(MONGODB_URI)
   .then((_) => {
-    app.listen(port);
-    console.log("Running!");
+    // we always need one register in the database!
+    Register.findOne({name: "Coffee Cup"})
+      .then(register => {
+        if (!register) {
+          const initialRegister = new Register({
+            balance: 0,
+            name: "Coffee Cup",
+            payments: [],
+          });
+          initialRegister.save()
+            .then(_ => {
+              app.listen(port);
+              console.log("New Register initialized!");
+              console.log("Running!");
+            })
+        } else {
+          app.listen(port);
+          console.log("Running!");
+        }})
   })
   .catch((err) => {
     console.log(err);

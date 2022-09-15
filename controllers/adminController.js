@@ -1,10 +1,12 @@
 'use strict';
 
 const User = require("../models/user");
+const Register = require("../models/register");
 const Purchase = require("../models/purchases");
 const { receiveBill } = require("../util/messages");
 const sendgridMailer = require("@sendgrid/mail");
 const { convertStringToCent } = require("../util/calc");
+const { timeIntervals } = require("../util/constants");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.getAdminUserManagement = (req, res) => {
@@ -59,7 +61,8 @@ exports.postUserPayed = (req, res) => {
   const userId = req.params.userid;
   const paymentId = req.params.paymentid;
   const amount = convertStringToCent(req.body.amount);
-  User.findById(userId).then((user) => {
+  User.findById(userId)
+  .then(user => {
     const result = user.payments.find(({ _id }) => String(_id) === paymentId);
     result.payed = true;
     result.payedDate = new Date();
@@ -69,9 +72,27 @@ exports.postUserPayed = (req, res) => {
     }
     const currentBalance = user.currentBalanceInCent;
     user.currentBalanceInCent = currentBalance - amount;
-    user.save().then((_) => {
-      return res.redirect("/admin/users");
-    }).catch(err => console.log(err))
+    user.save()
+      .then(_ => {
+        Register.findOne({name: "Coffee Cup"})
+          .then(register => {
+            let dt = new Date()
+            register.balance += amount;
+            const payment = {
+              date: new Date(dt.getTime() + timeIntervals.HOUR * 2),
+              amount: amount,
+              paymentType: "DEPOSIT",
+              userId: user._id,
+              userName: `${user.firstname} ${user.lastname}`,
+              userDepartment: user.department,
+            }
+            register.payments.push(payment);
+            register.save()
+              .then(_ => {
+                return res.redirect("/admin/users");
+              }).catch(err => console.log(err))
+          })
+      })
   }).catch(err => console.log(err));
 };
 
