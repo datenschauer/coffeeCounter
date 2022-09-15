@@ -30,7 +30,13 @@ router.post("/account",
 
 router.get("/purchase", isLoggedIn, userController.getPurchase);
 
-router.post("/purchase", isLoggedIn, userController.postPurchase);
+router.post("/purchase",[
+  body("amount", "Eingabe muss in Euro erfolgen! (separiert mit Punkt oder Komma)")
+    .not()
+    .isEmpty()
+    .trim()
+
+], isLoggedIn, userController.postPurchase);
 
 router.get("/", (req, res, next) => {
   if (req.session.isLoggedIn) {

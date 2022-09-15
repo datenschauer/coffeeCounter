@@ -14,6 +14,9 @@
         <div class="segment">
             <label for="price">Preis:</label><br>
             <input type="text" id="price" name="price" placeholder="in Euro; bspw.: 3,50" required>
+            <% if (priceError) { %>
+                <div class="msg msg--error">Eingabe bitte nur in Euro (separiert mit Punkt oder Komma).</div>
+            <% } %>
         </div>
         <div class="segment">
             <button type="submit" id="coffee-btn" class="button disabled" disabled>abschicken</button>

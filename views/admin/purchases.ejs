@@ -1,0 +1,26 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/admin.css">
+<%- include('../includes/title.ejs') %>
+
+<%- include('../includes/nav.ejs') %>
+
+<%- include('../includes/functions.ejs') %>
+
+<% if (purchases.length > 0) { %>
+    <% for (const purchase of purchases) { %>
+        <% const price = formatCurrency(purchase.price) %>
+        <div class="bubble">
+            <p><strong>Name: </strong><%= purchase.userName %></p>
+            <p><strong>Datum: </strong><%= new Intl.DateTimeFormat("de-DE").format(purchase.date) %></p>
+            <p><strong>Beschreibung: </strong><%= purchase.description %></p>
+            <p><strong>Preis: </strong><%= price %>&euro;</p>
+            <form action="/admin/payed-user-for/<%= purchase._id %>" method="post">
+                <input class="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="button">ausgezahlt</button>
+            </form>
+        </div>
+    <% } %>
+<% } else { %>
+    Keine auszuzahlenden Einkäufe vorhanden.
+<% } %>
+<%- include('../includes/end.ejs') %>

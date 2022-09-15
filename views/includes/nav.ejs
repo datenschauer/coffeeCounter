@@ -11,7 +11,15 @@
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="/status"><span class="material-symbols-outlined">grouped_bar_chart</span> | Statusseite</a></li>
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="/purchase"><span class="material-symbols-outlined">shopping_cart_checkout</span> | Einkauf hinzufügen</a></li>
                 <li class="<%= session.isLoggedIn ? "" : "hidden" %>"><a href="/account"><span class="material-symbols-outlined">account_circle</span> | Account</a></li>
-                <li class="<%= session.isAdmin ? "" : "hidden" %>"><a href="/admin"><span class="material-symbols-outlined">admin_panel_settings</span> | Administration</a></li>
+                <li class="<%= session.isAdmin ? "" : "hidden" %>">
+                    <div class="menu-top"><span class="material-symbols-outlined">admin_panel_settings</span> | Administration</div>
+                    <div class="menu-sub hidden">
+                    <ul>
+                        <li class="<%= session.isAdmin ? "" : "hidden" %>"><a href="/admin/users"><span class="material-symbols-outlined">monetization_on</span> | Zahlungen User</a></li>
+                        <li class="<%= session.isAdmin ? "" : "hidden" %>"><a href="/admin/purchases"><span class="material-symbols-outlined">receipt_long</span> | Einkäufe User</a></li>
+                    </ul>
+                    </div>
+                </li>
                 <% if (session.isLoggedIn) { %>
                     <form action="/logout" method="post">
                         <input class="hidden" name="_csrf" value="<%= csrfToken %>">

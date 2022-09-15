@@ -96,44 +96,47 @@ exports.postUserAccount = (req, res, next) => {
   }
 };
 
-exports.getPurchase = (req, res, next) => {
-  User.findOne({ _id: req.session.user._id }).then((user) => {
-    res.render("purchase", {
-      firstname: user.firstname,
-    })
+exports.getPurchase = (req, res) => {
+  res.render("purchase", {
+    firstname: req.session.user.firstname,
+    priceError: req.flash("priceError")[0],
   })
 };
 
-exports.postPurchase = (req, res, next) => {
+exports.postPurchase = (req, res) => {
   const description = req.body.description;
   const priceString = req.body.price;
-  let dt = new Date();
-  dt = new Date(dt.getTime() + timeIntervals.HOUR * 2);
-  let price = null;
-  try {
-    if (priceString.includes(",")) {
-      price = convertStringToCent(priceString);
-    } else {
-      price = convertStringToCent(priceString, ".");
+  if (!priceString.match(/(^\d+[,.]\d{1,2}$)|(^\d+$)/)) {
+    req.flash("priceError", true);
+    return res.redirect("/purchase");
+  } else {
+    let dt = new Date();
+    dt = new Date(dt.getTime() + timeIntervals.HOUR * 2);
+    let price = null;
+    try {
+      if (priceString.includes(",")) {
+        price = convertStringToCent(priceString);
+      } else {
+        price = convertStringToCent(priceString, ".");
+      }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
-  }
-  User.findOne({ _id: req.session.user._id }).then((user) => {
-    const purchase = new Purchase({
-      description: description,
-      price: price,
-      date: dt,
-      userName: `${user.firstname} ${user.lastname}`,
-      userId: user._id,
-      userDepartment: user.department,
-      paid: false,
-    });
-    return purchase.save()
-      .then(_ => res.redirect("/home"))
-      .catch(err => console.log(err));
-  }).catch(err => console.log(err));
-};
+    User.findOne({ _id: req.session.user._id }).then((user) => {
+      const purchase = new Purchase({
+        description: description,
+        price: price,
+        date: dt,
+        userName: `${user.firstname} ${user.lastname}`,
+        userId: user._id,
+        userDepartment: user.department,
+        paid: false,
+      });
+      return purchase.save()
+        .then(_ => res.redirect("/home"))
+        .catch(err => console.log(err));
+    }).catch(err => console.log(err));
+  }};
 
 /**
  * A function to find open payments of an individual user

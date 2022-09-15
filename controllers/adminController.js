@@ -1,6 +1,7 @@
 'use strict';
 
 const User = require("../models/user");
+const Purchase = require("../models/purchases");
 const { receiveBill } = require("../util/messages");
 const sendgridMailer = require("@sendgrid/mail");
 const { convertStringToCent } = require("../util/calc");
@@ -73,6 +74,18 @@ exports.postUserPayed = (req, res) => {
     }).catch(err => console.log(err))
   }).catch(err => console.log(err));
 };
+
+exports.getAdminPurchaseManagement = (req, res) => {
+  Purchase.find({ paid: false })
+    .then(purchases => {
+      console.log(purchases);
+      res.render("admin/purchases", {
+        path: "/admin/purchases",
+        purchases: purchases,
+      });
+    })
+    .catch(err => console.log(err));
+}
 
 /**
  * find all users which are billable (are active and have a balance > 0)

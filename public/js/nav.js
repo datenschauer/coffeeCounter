@@ -14,3 +14,10 @@ const clickMenuBtn = () => {
 };
 
 menuBtn.addEventListener("click", clickMenuBtn);
+
+const menuTop = document.querySelector(".menu-top");
+const menuSub = document.querySelector(".menu-sub");
+
+menuTop.addEventListener("click", () => {
+  menuSub.classList.toggle("hidden");
+})

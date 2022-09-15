@@ -1,7 +1,6 @@
 'use strict';
 
 const mongoose = require("mongoose");
-// const Int32 = require('mongoose-int32');
 
 const Schema = mongoose.Schema;
 

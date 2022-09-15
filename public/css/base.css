@@ -128,6 +128,29 @@ img.full {
 .menu > ul > li > a:hover {
     color: #e91e63;
 }
+.menu-top:hover {
+    cursor: pointer;
+    color: #e91e63;
+}
+.menu-sub {
+    margin-top: 15px;
+    padding-top: 8px;
+    border-top: 1px dashed whitesmoke;
+}
+.menu-sub > ul > li {
+    list-style: none;
+    padding: 7px 0;
+}
+.menu-sub > ul > li > a {
+    color: whitesmoke;
+    font-weight: 400;
+}
+.menu-sub > ul > li > a:hover {
+    color: #e91e63;
+}
+.menu-sub.hidden {
+    display: none;
+}
 li.hidden {
     display: none;
 }
