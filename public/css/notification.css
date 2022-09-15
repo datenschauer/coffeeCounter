@@ -87,7 +87,7 @@ p.notification-close-icon:hover {
         width: 400px;
     }
     .notification {
-        right: 25%;
+        right: calc(50% - 150px);
     }
     .notification.shrink {
         animation-name: shrink25;
@@ -142,7 +142,7 @@ p.notification-close-icon:hover {
     0% {
         width: 270px;
         border-radius: 50px;
-        right: 25%;
+        right: calc(50% - 150px);
     }
     100% {
         width: 30px;
