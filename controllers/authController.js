@@ -176,6 +176,7 @@ exports.postRegister = (req, res, next) => {
               currentBalanceInCent: 0,
               cupsSinceLastPayment: 0,
               payments: [],
+              paymentPending: false,
             });
              req.flash("justRegistered", true);
              res.redirect("/login");
