@@ -6,7 +6,7 @@ const Purchase = require("../models/purchases");
 const { receiveBill } = require("../util/messages");
 const sendgridMailer = require("@sendgrid/mail");
 const { convertStringToCent } = require("../util/calc");
-const { timeIntervals } = require("../util/constants");
+const { timeIntervals, PRICE_PER_CUP, PRICE_FOR_MILK } = require("../util/constants");
 sendgridMailer.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.getAdminUserManagement = (req, res) => {
@@ -29,12 +29,12 @@ exports.postBillUsers = (req, res) => {
         const firstname = user.firstname;
         const email = user.email;
         const cupsSinceLastPayment = user.cupsSinceLastPayment;
-        const currentBalanceInCent = user.currentBalanceInCent;
+        const billedAmountInCent = user.currentBalanceInCent;
         const emailMessage = receiveBill(
           firstname,
           email,
           cupsSinceLastPayment,
-          currentBalanceInCent,
+          billedAmountInCent,
         );
           sendgridMailer.send(emailMessage).then(
             (_) => {},
@@ -46,10 +46,11 @@ exports.postBillUsers = (req, res) => {
             }
           );
           user.cupsSinceLastPayment = 0;
+          user.currentBalanceInCent = 0;
           user.paymentPending = true;
           user.payments.push({
             billDate: new Date(),
-            amount: currentBalanceInCent,
+            amount: billedAmountInCent,
             payed: false,
           });
           user.save().then(res.redirect("/admin/users"));
@@ -70,8 +71,6 @@ exports.postUserPayed = (req, res) => {
     if (!anyOpenPayments) {
       user.paymentPending = false;
     }
-    const currentBalance = user.currentBalanceInCent;
-    user.currentBalanceInCent = currentBalance - amount;
     user.save()
       .then(_ => {
         Register.findOne({name: "Coffee Cup"})
@@ -106,6 +105,30 @@ exports.getAdminPurchaseManagement = (req, res) => {
       });
     })
     .catch(err => console.log(err));
+}
+
+// temp!
+exports.getAdminAddCoffee = (req, res) => {
+  res.render("admin/add-coffee", {
+    path: "/admin/add-coffee",
+  })
+}
+
+exports.postAdminAddCoffee = (req, res) => {
+  User.findById(String(req.params.userid)).then(user => {
+    const drink = {
+      date: new Date(req.body.date),
+      cups: Number(req.body.amount),
+      withMilk: true,
+      priceInCent: Number(req.body.amount) * (PRICE_PER_CUP + PRICE_FOR_MILK),
+    }
+    user.currentBalanceInCent += drink.priceInCent;
+    user.cupsSinceLastPayment += drink.cups;
+    user.drinks.push(drink);
+    user.save().then(_ => {
+      return res.redirect("/home");
+    })
+  }).catch(err => {console.log(err)})
 }
 
 /**
