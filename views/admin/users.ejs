@@ -33,9 +33,11 @@
         <% } %>
 
 <% if (billableUsers.length >= 1) { %>
+    <% const summa = billableUsers.reduce((pV, cV) => pV + cV.currentBalanceInCent, 0) %>
     <hr>
     <div class="bubble">
-        Es können <strong><%= billableUsers.length %></strong> Nutzer*innen abgerechnet werden.
+        Es können <strong><%= billableUsers.length %></strong> Nutzer*innen
+        für insgesamt <%= formatCurrency(summa) %>&euro; abgerechnet werden.
     </div>
 
     <form action="/admin/bill-users" method="post">
