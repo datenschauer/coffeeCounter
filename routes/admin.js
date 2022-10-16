@@ -17,6 +17,8 @@ router.post("/admin/user-payed/:userid/:paymentid", isAdmin, adminController.pos
 
 router.get("/admin/purchases", isAdmin, adminController.getAdminPurchaseManagement);
 
+router.post("/admin/payed-user-for/:purchaseid", isAdmin, adminController.postPurchasePayed);
+
 // TEMP!
 router.get("/admin/add-coffee", isAdmin, adminController.getAdminAddCoffee);
 router.post("/admin/add-coffee/:userid", isAdmin, adminController.postAdminAddCoffee);

@@ -105,14 +105,42 @@ exports.getAdminPurchaseManagement = (req, res) => {
       });
     })
     .catch(err => console.log(err));
-}
+};
 
-// temp!
+exports.postPurchasePayed = (req, res) => {
+  console.log(req.params.purchaseid)
+  let amount;
+  let user;
+  Purchase.findById(req.params.purchaseid).then(purchase => {
+    amount = purchase.price;
+    user = purchase.userId;
+    purchase.paid = true;
+    purchase.save().then(_ => {
+      Register.findOne({ name: "Coffee Cup"}).then(register => {
+        let dt = new Date()
+        register.balance -= amount;
+        const payment = {
+          date: new Date(dt.getTime() + timeIntervals.HOUR * 2),
+          amount: amount,
+          paymentType: "WITHDRAWAL",
+          userId: user,
+        }
+        register.payments.push(payment);
+        register.save().then(_ => {
+          return res.redirect("/admin/purchases");
+        })
+
+      }).catch(err => console.log(err));
+    }).catch(err => console.log(err));
+  }).catch(err => console.log(err));
+};
+
+// --> begin temp!
 exports.getAdminAddCoffee = (req, res) => {
   res.render("admin/add-coffee", {
     path: "/admin/add-coffee",
   })
-}
+};
 
 exports.postAdminAddCoffee = (req, res) => {
   User.findById(String(req.params.userid)).then(user => {
@@ -129,8 +157,8 @@ exports.postAdminAddCoffee = (req, res) => {
       return res.redirect("/home");
     })
   }).catch(err => {console.log(err)})
-}
-
+};
+// --> end temp!
 /**
  * find all users which are billable (are active and have a balance > 0)
  * @param fieldsString "field1 field2 ..." => fields which should be returned from db
